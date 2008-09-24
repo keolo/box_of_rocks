@@ -1,13 +1,16 @@
 #!/usr/bin/env ruby
 
 # Domain Search
-# Search domains against a given dictionary of words.
+# Search for available domains against a given
+# dictionary of words.
 #
 #  Author: Keolo Keagy
 #   Email: keolo@dreampointmedia.com
 # License: New BSD
-
-# TODO: add random delay so whois check so they don't block us
+#
+# About: TODO
+#  * Add random delay so we don't overwhelm the
+#    whois server with checks.
 class DomainSearch
   attr_accessor :tld, :dictionary, :min_word_size#, :whois_delay
 
