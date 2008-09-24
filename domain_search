@@ -99,3 +99,4 @@ end
 domain_search = DomainSearchCom.new
 domain_search.min_word_size = 7
 puts domain_search.word_list
+puts domain_search.available_domains
