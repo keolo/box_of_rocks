@@ -1,0 +1,3 @@
+#!/bin/bash
+# Recursively svn add
+svn status | grep "^?" | awk -F "      " '{print $2}' | tr "\n" "\0" | xargs -0 svn add

@@ -1,0 +1,4 @@
+#!/bin/bash
+# Recursively svn delete
+# useful to do a svn delete on files you accidentally rm -rf'ed
+svn status | grep "^!" | awk -F "      " '{print $2}' | tr "\n" "\0" | xargs -0 svn delete
