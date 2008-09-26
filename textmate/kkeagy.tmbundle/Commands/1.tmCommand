@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>perl -pe 's/[\t ]+$//g' &gt; "$TM_FILEPATH" &amp;&amp; cat "$TM_FILEPATH"</string>
+	<key>input</key>
+	<string>document</string>
+	<key>name</key>
+	<string>1</string>
+	<key>output</key>
+	<string>replaceDocument</string>
+	<key>scope</key>
+	<string>source</string>
+	<key>uuid</key>
+	<string>9DE91F52-A7EC-4367-B9F8-891DF969E235</string>
+</dict>
+</plist>
