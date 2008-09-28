@@ -25,7 +25,7 @@ case $TERM in
 esac
 
 PS1="${TITLEBAR}\
-$GREEN\$$NO_COLOR "
+$GREEN#$NO_COLOR "
 
 
 # Misc
