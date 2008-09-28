@@ -1,5 +1,5 @@
-# Bash Profile OS X
-# -----------------
+# Bash Profile Ubuntu
+# -------------------
 # Keolo Keagy
 
 # Comand prompt formatting
@@ -36,12 +36,12 @@ export EDITOR='vi'
 set -o vi
 
 # Path
-PATH=$PATH:~/bin
-export PATH
+# PATH=$PATH:~/bin
+# export PATH
 
 # cd Path
-CDPATH=.:~:~/Sites
-export CDPATH
+# CDPATH=.:~:~/Sites
+# export CDPATH
 
 ##
 # Tips and Tricks... from http://www.caliban.org/bash/index.shtml
@@ -70,17 +70,8 @@ export HISTSIZE
 #--------
 
 # Bash
-alias bashprofile='vi ~/.bash_profile && source ~/.bash_profile'
+# alias bashprofile='vi ~/.bash_profile && source ~/.bash_profile'
 alias ls='ls -laF'
-
-# MySQL
-alias mysql_start='/Library/StartupItems/MySQLCOM/MySQLCOM start'
-alias mysql_stop='/Library/StartupItems/MySQLCOM/MySQLCOM stop'
-alias mysql_restart='/Library/StartupItems/MySQLCOM/MySQLCOM restart'
-
-# TextMate
-# Open only common directories in a rails app
-alias matey='mate app config lib db public test vendor/plugins &'
 
 # Rails
 alias ss='script/server'
@@ -89,7 +80,7 @@ alias sg='script/generate'
 alias sp='script/plugin'
 
 # Ruby (make sure you have qri installed)
-alias ri='qri'
+# alias ri='qri'
 
 # Git
 alias ga='git add'
@@ -103,10 +94,3 @@ alias gpl='git pull'
 alias gp='git push'
 alias gst='git status'
 alias gw='git whatchanged'
-
-# Copy public ssh key to remote host
-# Usage: authme username@host.com
-function authme {
-  ssh $1 'cat >> ~/.ssh/authorized_keys' < ~/.ssh/id_rsa.pub
-}
-
