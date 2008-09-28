@@ -33,7 +33,9 @@ $CYAN>$NO_COLOR "
 
 # Default editor
 export EDITOR='vi'
-set -o vi
+
+# Set editing mode
+set -o emacs
 
 # Path
 PATH=$PATH:~/bin
