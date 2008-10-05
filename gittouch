@@ -1,0 +1,19 @@
+#!/bin/bash
+# Finds empty directories and adds a .gitignore file to them
+find . \( -type d -empty \) -and \( -not -regex ./\.git.* \) -exec touch {}/.gitignore \;
+
+# Here's a ruby implementation
+# http://rorblog.techcfl.com/2008/05/11/rails-git-and-empty-directories/
+# def touch_gitignore(path = '.')
+#   Dir[File.join(File.expand_path(path), '**')].each do |file|
+#     if File.directory?(file)
+#       touch_gitignore(file)
+#       if Dir[File.join(file, '*')].empty?
+#         `touch #{File.join(file, '.gitignore')}`
+#         puts 'touched: ' + file
+#       end
+#     end
+#   end
+# end
+#
+# ARGV.first ? touch_gitignore(ARGV.first) : touch_gitignore
