@@ -4,7 +4,6 @@
 # Show svn or log for given search term.
 #
 #  Author: Keolo Keagy
-#   Email: keolo@dreampointmedia.com
 # License: New BSD
 
 # TODO: Escape search_term (e.g. \#354)
