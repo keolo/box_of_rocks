@@ -1,0 +1,163 @@
+### This file configures various client-side behaviors.
+###
+### The commented-out examples below are intended to demonstrate
+### how to use this file.
+
+### Section for authentication and authorization customizations.
+[auth]
+### Set store-passwords to 'no' to avoid storing passwords in the
+### auth/ area of your config directory.  It defaults to 'yes'.
+### Note that this option only prevents saving of *new* passwords;
+### it doesn't invalidate existing passwords.  (To do that, remove
+### the cache files by hand as described in the Subversion book.)
+# store-passwords = no
+### Set store-auth-creds to 'no' to avoid storing any subversion
+### credentials in the auth/ area of your config directory.
+### It defaults to 'yes'.  Note that this option only prevents
+### saving of *new* credentials;  it doesn't invalidate existing
+### caches.  (To do that, remove the cache files by hand.)
+# store-auth-creds = no
+
+### Section for configuring external helper applications.
+[helpers]
+### Set editor to the command used to invoke your text editor.
+###   This will override the environment variables that Subversion
+###   examines by default to find this information ($EDITOR, 
+###   et al).
+# editor-cmd = editor (vi, emacs, notepad, etc.)
+### Set diff-cmd to the absolute path of your 'diff' program.
+###   This will override the compile-time default, which is to use
+###   Subversion's internal diff implementation.
+#diff-cmd = /Users/kkeagy/bin/svndiffshim.py
+### Set diff3-cmd to the absolute path of your 'diff3' program.
+###   This will override the compile-time default, which is to use
+###   Subversion's internal diff3 implementation.
+#diff3-cmd = 
+### Set diff3-has-program-arg to 'true' or 'yes' if your 'diff3'
+###   program accepts the '--diff-program' option.
+# diff3-has-program-arg = [true | false]
+
+### Section for configuring tunnel agents.
+[tunnels]
+### Configure svn protocol tunnel schemes here.  By default, only
+### the 'ssh' scheme is defined.  You can define other schemes to
+### be used with 'svn+scheme://hostname/path' URLs.  A scheme
+### definition is simply a command, optionally prefixed by an
+### environment variable name which can override the command if it
+### is defined.  The command (or environment variable) may contain
+### arguments, using standard shell quoting for arguments with
+### spaces.  The command will be invoked as:
+###   <command> <hostname> svnserve -t
+### (If the URL includes a username, then the hostname will be
+### passed to the tunnel agent as <user>@<hostname>.)  If the
+### built-in ssh scheme were not predefined, it could be defined
+### as:
+# ssh = $SVN_SSH ssh
+### If you wanted to define a new 'rsh' scheme, to be used with
+### 'svn+rsh:' URLs, you could do so as follows:
+# rsh = rsh
+### Or, if you wanted to specify a full path and arguments:
+# rsh = /path/to/rsh -l myusername
+### On Windows, if you are specifying a full path to a command,
+### use a forward slash (/) or a paired backslash (\\) as the
+### path separator.  A single backslash will be treated as an
+### escape for the following character.
+
+### Section for configuring miscelleneous Subversion options.
+[miscellany]
+### Set global-ignores to a set of whitespace-delimited globs
+### which Subversion will ignore in its 'status' output, and
+### while importing or adding files and directories.
+global-ignores = *.o *.lo *.la #*# .*.rej *.rej .*~ *~ .#* .DS_Store ._*
+
+### Set log-encoding to the default encoding for log messages
+# log-encoding = latin1
+### Set use-commit-times to make checkout/update/switch/revert
+### put last-committed timestamps on every file touched.
+# use-commit-times = yes
+### Set no-unlock to prevent 'svn commit' from automatically
+### releasing locks on files.
+# no-unlock = yes
+### Set enable-auto-props to 'yes' to enable automatic properties
+### for 'svn add' and 'svn import', it defaults to 'no'.
+### Automatic properties are defined in the section 'auto-props'.
+enable-auto-props = yes
+
+### Section for configuring automatic properties.
+[auto-props]
+# Borrowed from http://wiki.apache.org/cocoon/SVNConfig
+# and http://trac.symfony-project.com/wiki/SymfonyRepositoryTips
+
+# Scripts
+*.sh  = svn:eol-style=native; svn:executable; svn:keywords=Id Rev Date Author
+*.bat = svn:eol-style=CRLF; svn:executable; svn:keywords=Id Rev Date Author
+
+# Text files, Source code
+*.java       = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.txt        = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.mf         = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.sql        = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.props      = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.properties = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.info       = svn:eol-style=native; svn:keywords=Id Rev Date Author
+.htaccess    = svn:eol-style=native; svn:keywords=Id Rev Date Author
+.htpasswd    = svn:eol-style=native; svn:keywords=Id Rev Date Author
+CHANGES      = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/plain
+KEYS         = svn:eol-style=native; svn:keywords=Id Rev Date Author
+INSTALL      = svn:eol-style=native; svn:keywords=Id Rev Date Author
+LICENSE      = svn:eol-style=native; svn:keywords=Id Rev Date Author
+README       = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/plain
+TODO         = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/plain
+VERSION      = svn:eol-style=native; svn:keywords=Id Rev Date Author
+
+# Web, XML
+*.htm   = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/html
+*.html  = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/html
+*.php   = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/x-php
+*.phtml = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.rb    = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.erb   = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.jx    = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.js    = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/javascript
+*.css   = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.svg   = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.xml   = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/xml
+*.xsd   = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/xml
+*.xsl   = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/xml
+*.xslt  = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/xml
+*.dtd   = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/xml
+*.xul   = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/xul
+*.roles = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.wsdl  = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.pl    = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/x-perl; svn:executable
+*.pm    = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/x-perl
+*.py    = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/x-python; svn:executable
+*.cgi   = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn-mine-type=text/plain
+
+# Config
+*.ini  = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/plain
+*.yml  = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/plain
+*.cfg  = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/plain
+*.conf = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/plain
+config = svn:eol-style=native; svn:keywords=Id Rev Date Author; svn:mime-type=text/plain
+
+# DTD, Schemas, etc
+*.dtd = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.ent = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.pen = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.mod = svn:eol-style=native; svn:keywords=Id Rev Date Author
+*.rng = svn:eol-style=native; svn:keywords=Id Rev Date Author
+
+# Images
+*.gif  = svn:mime-type=image/gif
+*.png  = svn:mime-type=image/png
+*.jpg  = svn:mime-type=image/jpeg
+*.jpeg = svn:mime-type=image/jpeg
+*.bmp  = svn:mime-type=image/bmp
+*.ico  = svn:mime-type=application/octet-stream
+*.tif  = svn:mime-type=image/tiff
+*.tiff = svn:mime-type=image/tiff
+
+# Binary
+*.jar = svn:mime-type=application/octet-stream
+*.pdf = svn:mime-type=application/pdf
