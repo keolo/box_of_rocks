@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+#
+# ~/bin/railsbrain
+#
+# looks up any passed parameters as a query on railsbrain,
+# eg: railsbrain xml_http_request
+#
+# To use it, symbolicly link this file to your ~/bin dir,
+# or make the goldstar/bin dir part of your path.
+#
+# - Steven Soroka
+#
+require 'cgi'
+require 'rubygems'
+require 'mechanize'
+BASE_URL = "http://www.railsbrain.com/api/rails-2.1.0/doc"
+params = ARGV.select{|i| i =~ /^\-/ }
+query = CGI.escape(ARGV.select{|i| i !~ /^\-/ }.join('_'))
+mech = WWW::Mechanize.new
+
+if params.empty?
+  params = %w(-m -c -f)
+end
+
+param_translation = {'-c' => 'class', '-f' => 'file', '-m' => 'method'}
+
+what_to_search = params.map{|p|
+  begin
+    param_translation[p]
+  rescue
+    puts "Unknown parameter: #{p}"
+    nil
+  end
+}.compact
+
+matches = []
+guesses = []
+what_to_search.each{|domain|
+  doc = mech.get "#{BASE_URL}/fr_#{domain}_index.html" # this could use to be cached.
+  (doc/'a').each{|link|
+    if link.inner_html.downcase == query.downcase
+      matches << [domain, link.inner_html, link['href']]
+    end
+    if link.inner_html.downcase.include?(query.downcase)
+      guesses << link.inner_html
+    end
+  }
+}
+if matches.size < 5
+  matches.each{|match|
+    domain, html, link = match
+    system "open '#{BASE_URL}/#{link}'"
+  }
+elsif matches.empty?
+  puts "Sorry, nothing found for '#{query}'"
+  if guesses.any?
+    puts "Did you mean one of these?"
+    guesses.each{|guess|
+      puts "  #{guess}"
+    }
+  end
+else
+  # multiple matches
+  puts "There are multiple matches:"
+  matches.each{|domain, name, link|
+    puts "  #{name} (#{domain})\n    #{BASE_URL}/#{link}"
+  }
+end
