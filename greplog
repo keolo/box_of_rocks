@@ -7,10 +7,11 @@
 # License: New BSD
 
 # TODO: Escape search_term (e.g. \#354)
-#       Make object oriented
+#       Make object oriented?
 #       Add ability to search for multiple terms
 #       Create option to turn off pager
 #       Cache `svn log -v` for quicker performance
+#       Git support?
 class Float
   def round_to(x)
     (self * 10**x).round.to_f / 10**x
@@ -64,6 +65,11 @@ system('clear')
 
 SEARCH_TERM = ARGV[0]
 SEPERATOR = "\n------------------------------------------------------------------------\n"
+
+
+# Yikes! The following section could be done
+# better by parsing xml. Some svn commands
+# take an --xml flag. See libxml-ruby for parsing.
 
 # Get svn log -v
 svn_log = `svn log -v`
