@@ -96,7 +96,7 @@ alias ri='qri'
 # Git
 alias ga='git add'
 alias gco='git checkout'
-alias gc='git commit -v'
+alias gci='git commit -v'
 alias gb='git branch'
 alias gba='git branch -a'
 alias gd='git diff | mate'
