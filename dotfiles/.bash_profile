@@ -73,7 +73,7 @@ export HISTSIZE
 
 # Bash
 alias bashprofile='vi ~/.bash_profile && source ~/.bash_profile'
-alias ls='ls -laF'
+alias ll='ls -laF'
 
 # MySQL
 alias mysql_start='/Library/StartupItems/MySQLCOM/MySQLCOM start'
