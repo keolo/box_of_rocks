@@ -298,10 +298,12 @@ To change password
     sudo aptitude install vsftpd
 
 Test (from client)
+
     ftp anonymous@server
     dir
 
 Add false shell
+
     sudo vi /etc/shells
     /bin/false # Add to list
 
@@ -314,6 +316,7 @@ Edit config
     chroot_local_user=YES
 
 Create user with no shell
+
     sudo useradd userftp -d /home/userftp -s /bin/false
     sudo passwd userftp
 
