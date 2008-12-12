@@ -38,7 +38,7 @@ export EDITOR='vi'
 set -o emacs
 
 # Path
-PATH=$PATH:~/bin
+PATH=$PATH:~/bin:~/repos/box_of_rocks
 export PATH
 
 # cd Path
@@ -105,6 +105,7 @@ alias gpl='git pull'
 alias gp='git push'
 alias gst='git status'
 alias gw='git whatchanged'
+alias gr='git rebase'
 
 # Copy public ssh key to remote host
 # Usage: authme username@host.com

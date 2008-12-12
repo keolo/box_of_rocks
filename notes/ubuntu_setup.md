@@ -53,6 +53,7 @@ Set VMWare networking to bridged. Might need to restart networking.
 
 ## Networking
 Ethernet MAC addresses are cached. Remove this file to clear the cache.
+
     sudo rm /etc/udev/rules.d/70-persistent-net.rules
     sudo vi /etc/hosts - change ip address and hostnames
     sudo vi /etc/hostname - change hostname
@@ -76,19 +77,20 @@ You can do this manually:
 
 Or use the .bash_profile from my git repository:
 
-    cd
     aptitude install git-core
-    git clone git://github.com/keolo/scripts.git
+    mkdir repos
+    cd repos
+    git clone git://github.com/keolo/box_of_rocks.git
     git config user.email keolo@dreampointmedia.com
     git config user.name "Keolo Keagy"
 
-Load .kkeagyrc if it exists
+Load .myrc if it exists
 
     vi .profile
 
     # include .kkeagyrc if it exists
-    if [ -f "$HOME/scripts/dotfiles/.kkeagyrc" ]; then
-        . "$HOME/scripts/dotfiles/.kkeagyrc"
+    if [ -f "$HOME/scripts/dotfiles/.myrc" ]; then
+        . "$HOME/scripts/dotfiles/.myrc"
     fi
 
     . .profile
