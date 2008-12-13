@@ -4,21 +4,32 @@
 ## Install base OS
 Download and install [Ubuntu Server 64bit version](http://www.ubuntu.com/getubuntu/download).
 
-Maybe [easyvmx](http://easyvmx.com) works too?
-
 http://users.piuha.net/martti/comp/ubuntu/en/server.html
-http://sysadminschronicles.com/articles/2008/05/06/ubuntu-8-04-rails-server-using-passenger
 
-## Check which ubuntu release is installed
+## Check which ubuntu release is installed (just for kicks)
     lsb_release -a
+    uname -a
 
-## Create kkeagy user
-    adduser kkeagy
-    visudo
-    kkeagy ALL=(ALL) ALL
+## Update Sources and Upgrade Packages
+
+Optionally update apt/sources.list
+
+    vi /etc/apt/sources.list
+
+    sudo aptitude update
+    sudo aptitude dist-upgrade
+
+## Install build tools
+    sudo aptitude install build-essential
+
+## Install SSH Server (VMWare only)
+    aptitude install ssh openssh-server
+
+## Setup for VMWare
+[Link to VMWare setup](vmware_setup.md)
 
 ## Set up rsa authentication
-    su kkeagy
+    su deploy
     cd
     mkdir .ssh
 
@@ -27,39 +38,10 @@ Then from local machine:
     authme hostname
     ssh hostname
 
+Rinse and repeat any other users that you need.
+
 ## Run As Root
     sudo -i
-
-## Install build tools
-    sudo aptitude install build-essential
-
-## Update Sources and Upgrade Packages
-
-Optionally update apt/sources.list
-
-    vi /etc/apt/sources.list
-
-    aptitude update
-    aptitude dist-upgrade
-
-## Install SSH Server (VMWare only)
-    aptitude install ssh openssh-server
-
-## Login Via SSH (VMWare only)
-Set VMWare networking to bridged. Might need to restart networking.
-
-    /etc/init.d/networking restart
-    ssh user@host
-
-## Networking
-Ethernet MAC addresses are cached. Remove this file to clear the cache.
-
-    sudo rm /etc/udev/rules.d/70-persistent-net.rules
-    sudo vi /etc/hosts - change ip address and hostnames
-    sudo vi /etc/hostname - change hostname
-    sudo vi /etc/network/interfaces - change ip address
-
-http://www.cyberciti.biz/tips/howto-ubuntu-linux-convert-dhcp-network-configuration-to-static-ip-configuration.html
 
 ## Disable SSH root login
     sudo vi /etc/ssh/sshd_config
@@ -75,30 +57,25 @@ You can do this manually:
     exit
     vi ~/.bashrc
 
-Or use the .bash_profile from my git repository:
+Or use the .bash_profile from my box of rocks:
 
-    aptitude install git-core
+    sudo aptitude install git-core
     mkdir repos
     cd repos
     git clone git://github.com/keolo/box_of_rocks.git
-    git config user.email keolo@dreampointmedia.com
-    git config user.name "Keolo Keagy"
+    git config --global user.email keolo@dreampointmedia.com
+    git config --global user.name "Keolo Keagy"
 
 Load .myrc if it exists
 
     vi .profile
 
-    # include .kkeagyrc if it exists
-    if [ -f "$HOME/scripts/dotfiles/.myrc" ]; then
-        . "$HOME/scripts/dotfiles/.myrc"
+    # Include .myrc if it exists
+    if [ -f "$HOME/repos/box_of_rocks/dotfiles/.myrc" ]; then
+        . "$HOME/repos/box_of_rocks/dotfiles/.myrc"
     fi
 
     . .profile
-
-## Git
-    git push origin branch_name
-    git checkout -b branch_name
-    git pull origin branch_name
 
 ## Change Hostname
     hostname name
@@ -106,101 +83,14 @@ Load .myrc if it exists
 ## Synchronize the System Clock
     aptitude install ntp ntpdate
 
-## Install vim-full (is there a non-gtk version?)
-    aptitude install vim-full
-
-## Install VMWare tools (VMWare only)
-### amd64 users
-    aptitude install ia32-libs
-
-    aptitude install build-essential linux-headers-server libgtk2.0-dev
-    aptitude install libproc-dev libdumbnet-dev xorg-dev libicu38 libicu-dev
-
-    cd /usr/local/src/
-    wget http://downloads.sourceforge.net/open-vm-tools/open-vm-tools-2008.07.01-102166.tar.gz?modtime=1214928542&big_mirror=0
-    tar xvzf open-vm-tools-2008.05.15-93241.tar.gz
-    cd open-vm-tools-2008.05.15-93241/
-    ./configure && make
-    cd modules/linux/
-    for i in *; do mv ${i} ${i}-only; tar -cf ${i}.tar ${i}-only; done
-
-Virtual Machine > Install VMWare Tools
-
-    mount /cdrom
-
-    cd /usr/local/src
-    cp /cdrom/VMwareTools-*.tar.gz .
-    tar xf VMwareTools-*.tar.gz
-    mv -f open-vm-tools-2008.05.15-93241/modules/linux/*.tar vmware-tools-distrib/lib/modules/source/
-    ./vmware-tools-distrib/vmware-install.pl
-
-Make sure there are no errors/failures. Shared directories should work after restart.
-
-    shutdown -r now
-    ls /mnt/hgfs/shared_dir/
-
-Cleanup
-    rm -rf /usr/local/src/*
-
-http://www.howtoforge.com/perfect-server-ubuntu8.04-lts-p3
-
-## Configure Networking (static ip) (VMWare only)
-    vi /etc/network/interfaces
-
-    # This file describes the network interfaces available on your system
-    # and how to activate them. For more information, see interfaces(5).
-
-    # The loopback network interface
-    auto lo
-    iface lo inet loopback
-
-    # The primary network interface
-    auto eth0
-    #iface eth0 inet dhcp
-    iface eth0 inet static
-            address 192.168.1.200
-            netmask 255.255.255.0
-            network 192.168.1.0
-            broadcast 192.168.1.255
-            gateway 192.168.1.1
-
-
-    /etc/init.d/networking restart
-
-Then edit /etc/hosts. Make it look like this:
-
-    vi /etc/hosts
-
-    127.0.0.1       localhost.localdomain   localhost
-    192.168.0.100   server1.example.com     server1
-    # The following lines are desirable for IPv6 capable hosts
-    ::1     ip6-localhost ip6-loopback
-    fe00::0 ip6-localnet
-    ff00::0 ip6-mcastprefix
-    ff02::1 ip6-allnodes
-    ff02::2 ip6-allrouters
-    ff02::3 ip6-allhosts
-
-Now run
-
-    echo server1.example.com > /etc/hostname
-    /etc/init.d/hostname.sh start
-
-Afterwards, run
-
-    hostname
-    hostname -f
-
-Both should show server1.example.com now.
-
 ## Manage users
     adduser kkeagy
     usermod -G admin kkeagy
     adduser deploy
     visudo
-    deploy ALL=(ALL) ALL
+    deploy ALL=(ALL) ALL # Adds sudo permissions
 
-## SSH Security by Obscurity (optional)
+## SSH Security by Obscurity i.e. not really that secure (optional)
 Prevent cracker bots by setting a non-standard port.
 
     vi /etc/ssh/ssh_config
@@ -213,6 +103,30 @@ Prevent cracker bots by setting a non-standard port.
 
 Copy public key authentication (executed on local machine).
     authme ip_address
+
+
+## Install apache2
+    sudo aptitude install apache2
+
+## Install REE
+    wget http://rubyforge.org/frs/download.php/47937/ruby-enterprise-1.8.6-20081205.tar.gz
+    tar xzvf ruby-enterprise-1.8.6-20081205.tar.gz
+
+    wget http://gist.github.com/raw/33313/b556fae6a2f1a48c6acea0f350af0f1017efd379 -O patch.diff
+    cd ruby-enterprise-1.8.6-20081205 patch -p1 -E < ../patch.diff
+
+    ./installer
+
+If you ever want to uninstall Ruby Enterprise Edition, simply remove this
+directory:
+
+    /opt/ruby-enterprise-1.8.6-20081205
+
+/opt/ruby-enterprise-1.8.6-20081205/bin/ruby /opt/ruby-enterprise-1.8.6-20081205/bin/gem install mysql
+
+
+## Install Phusion Passenger
+    /opt/ruby-enterprise-1.8.6-20081205/bin/passenger-install-apache2-module
 
 ## Install Nginx
     sudo aptitude install nginx
@@ -296,7 +210,7 @@ To change password
     sudo gem install RubyInline --no-rdoc --no-ri
     sudo gem install image_science --no-rdoc --no-ri
 
-## vsftpd
+## vsftpd (ftp server)
     sudo aptitude install vsftpd
 
 Test (from client)

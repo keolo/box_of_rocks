@@ -38,8 +38,8 @@ export EDITOR='vi'
 set -o emacs
 
 # Path
-# PATH=$PATH:~/bin
-# export PATH
+PATH=$PATH:~/bin:~/repos/box_of_rocks
+export PATH
 
 # cd Path
 # CDPATH=.:~:~/Sites
@@ -73,7 +73,7 @@ export HISTSIZE
 
 # Bash
 # alias bashprofile='vi ~/.bash_profile && source ~/.bash_profile'
-alias ls='ls -laF'
+alias ll='ls -laF'
 
 # Rails
 alias ss='script/server'
