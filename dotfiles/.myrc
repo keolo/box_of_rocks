@@ -1,6 +1,20 @@
-# Bash Profile Ubuntu
-# -------------------
+# Bash Profile
+# Tested on OS X and Ubuntu
+# -------------------------
 # Keolo Keagy
+
+# Setup
+# -----
+# Include this file in your ~/.bash_profile or ~/.profile. Change path if necessary.
+# E.g.
+#
+# if [ -n "$BASH_VERSION" ]; then
+#   # Include my custom rc if it exists
+#   if [ -f "$HOME/repos/box_of_rocks/dotfiles/.myrc" ]; then
+#     . "$HOME/repos/box_of_rocks/dotfiles/.myrc"
+#   fi
+# fi
+
 
 # Comand prompt formatting
 #-------------------------
@@ -14,18 +28,21 @@ PURPLE="\[\033[0;35m\]"
 CYAN="\[\033[0;36m\]"
 WHITE="\[\033[1;37m\]"
 
-# Display title bar if login shell is xterm
+# Display info in title bar if login shell is xterm
 case $TERM in
-    xterm*)
-        TITLEBAR='\[\e]2;\u@\h \w\a\]'
-        ;;
-    *)
-        TITLEBAR=""
-        ;;
+  xterm*)
+    TITLEBAR='\[\e]2;\u@\h \w\a\]';;
+  *)
+    TITLEBAR="";;
 esac
 
-PS1="${TITLEBAR}\
-$GREEN#$NO_COLOR "
+# Settings for OS X and Ubuntu
+case `uname` in
+  Darwin*)
+    PS1="${TITLEBAR}$CYAN>$NO_COLOR ";;
+  *)
+    PS1="${TITLEBAR}$GREEN#$NO_COLOR ";;
+esac
 
 
 # Misc
@@ -42,23 +59,25 @@ PATH=$PATH:~/bin:~/repos/box_of_rocks
 export PATH
 
 # cd Path
-# CDPATH=.:~:~/Sites
-# export CDPATH
+CDPATH=.:~:~/repos
+export CDPATH
 
-##
-# Tips and Tricks... from http://www.caliban.org/bash/index.shtml
-# HISTIGNORE="&:l:ls:ls *:l *:cd:cd *:[bf]g:exit:quit:q:sleep *"
-        # History ignores commands that include any l/ls/cd etc
-        # This kicks-ass! It drops repeats and other useless
-        # things from the command history!
+
+# History
+#--------
+
+# History ignores commands that include any l/ls/cd etc This kicks-ass! It drops repeats and other
+# useless things from the command history!
+# http://www.caliban.org/bash/index.shtml
 HISTIGNORE="ls:cd:[bf]g:exit:quit:q:sleep *:ssh *:say*"
-        # I want to see cd * in my history
+
+# Ignores both commands that start with a space or a tab, and duplicates other options are as
+# follows:
+# `ignorespace' means to not enter lines which begin with a space or tab into the history list.
+# `ignoredups' means to not enter lines which match the last entered line.
+# `ignoreboth' combines the two options.
 HISTCONTROL=ignoreboth
-        # ignores both commands that start with a space or a tab, and duplicates
-        # other options are as follows:
-        # `ignorespace' means to not enter lines which begin with a space or tab into the history list.
-        # `ignoredups' means to not enter lines which match the last entered line.
-        # `ignoreboth' combines the two options.
+
 HISTFILESIZE=1000000000
 HISTSIZE=1000000
 
@@ -72,7 +91,6 @@ export HISTSIZE
 #--------
 
 # Bash
-# alias bashprofile='vi ~/.bash_profile && source ~/.bash_profile'
 alias ll='ls -laF'
 
 # Rails
@@ -80,9 +98,6 @@ alias ss='script/server'
 alias sc='script/console'
 alias sg='script/generate'
 alias sp='script/plugin'
-
-# Ruby (make sure you have qri installed)
-# alias ri='qri'
 
 # Git
 alias ga='git add'
@@ -96,3 +111,10 @@ alias gpl='git pull'
 alias gp='git push'
 alias gst='git status'
 alias gw='git whatchanged'
+alias gr='git rebase'
+
+# Copy public ssh key to remote host
+# Usage: authme username@host.com
+function authme {
+  ssh $1 'cat >> ~/.ssh/authorized_keys' < ~/.ssh/id_rsa.pub
+}

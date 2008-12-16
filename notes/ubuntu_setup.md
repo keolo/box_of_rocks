@@ -6,13 +6,6 @@ Download and install [Ubuntu Server 64bit version](http://www.ubuntu.com/getubun
 
 http://users.piuha.net/martti/comp/ubuntu/en/server.html
 
-## ubuntu-minimal
-On linode they install ubuntu-minimal. This means for 8.10 aptitude and other software isn't
-installed by default. But that's easy enough to solve.
-
-    apt-get update
-    apt-get install aptitude
-
 ## Create deploy user with sudo permissions
     adduser deploy
     visudo
@@ -29,6 +22,24 @@ Then from local machine:
 
 Rinse and repeat any other users that you need.
 
+## Disable root login for ssh (optionally change port number)
+First make sure you can login successfully with your deploy user and public key.
+    ssh deploy@hostname
+    sudo vi /etc/ssh/sshd_config
+
+    # Change to the following
+    PermitRootLogin no
+
+    # Reload config file
+    sudo service ssh reload
+
+## ubuntu-minimal
+On linode they install ubuntu-minimal. This means for 8.10 aptitude and other software isn't
+installed by default. But that's easy enough to solve.
+
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt-get install aptitude
 
 ## Check which ubuntu release is installed (just for kicks)
     lsb_release -a
@@ -51,15 +62,9 @@ Optionally update apt/sources.list
 
 ## Run As Root (optional)
 You can optionally switch to root to run the following commands. Although, getting in the habit of
-using sudo isn't a bad idea either.
+using sudo isn a better idea.
 
     sudo -i
-
-## Disable SSH root login (optional -- this doesn't work on 8.10?)
-    sudo vi /etc/ssh/sshd_config
-    Protocol 2
-    PermitRootLogin no
-    sudo service ssh restart
 
 ## Add .bash_profile and scripts
 You can do this manually:
@@ -251,6 +256,16 @@ To change password
     sudo gem install mongrel --no-rdoc --no-ri
     sudo gem install mongrel_cluster --no-rdoc --no-ri
 
+To start mongrel cluster on boot, copy the mongrel_cluster script file to `/etc/init.d`. Run
+`gem env` to find out where your ruby gems are installed.
+
+    1. Create mongrel_cluster conf directory (/etc/mongrel_cluster).
+    2. Copy the init.d script from mongrel_cluster’s resouces directory to /etc/init.d.
+       sudo cp /usr/lib/ruby/gems/1.8/gems/mongrel_cluster-1.0.5/resources/mongrel_cluster /etc/init.d/
+    3. sudo chmod +x /etc/init.d/mongrel_cluster
+    4. Add to init.d startup. On ubuntu: “sudo update-rc.d mongrel_cluster defaults”
+    5. Comment out the “USER=mongrel” line and the “chown $USER:$USER $PID_DIR” in mongrel_cluster.
+
 ## Install Nginx
     sudo aptitude install nginx
 
@@ -321,6 +336,19 @@ Restart ftp server and test
 
 ## Update locate db (optional)
     updatedb
+
+## Set hostname
+    echo yourname > /etc/hostname
+    hostname yourname
+    sudo vi /etc/hosts
+
+This brings up the /etc/hosts file in vim. Change the second line to match your ip, domain name and
+hostname.
+
+12.34.56.78 yourname.yourdomain.com yourname
+
+You should also create an A record for yourname.yourdomain.com in your DNS manager.
+
 
 ## Welcome Banner
 Create ascii banner [here](http://patorjk.com/software/taag/). (stampatello)
