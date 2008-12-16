@@ -1,6 +1,9 @@
 # VMWare Setup
 These are instructions for setting up Ubuntu on VMWare.
 
+## Install SSH Server
+    aptitude install ssh openssh-server
+
 ## Login Via SSH (VMWare only)
 Set VMWare networking to bridged. Might need to restart networking.
 

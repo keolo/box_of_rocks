@@ -6,6 +6,30 @@ Download and install [Ubuntu Server 64bit version](http://www.ubuntu.com/getubun
 
 http://users.piuha.net/martti/comp/ubuntu/en/server.html
 
+## ubuntu-minimal
+On linode they install ubuntu-minimal. This means for 8.10 aptitude and other software isn't
+installed by default. But that's easy enough to solve.
+
+    apt-get update
+    apt-get install aptitude
+
+## Create deploy user with sudo permissions
+    adduser deploy
+    visudo
+    deploy ALL=(ALL) ALL # Adds sudo permissions
+
+## Set up rsa authentication
+    su - deploy
+    mkdir .ssh
+
+Then from local machine:
+
+    authme deploy@hostname
+    ssh hostname
+
+Rinse and repeat any other users that you need.
+
+
 ## Check which ubuntu release is installed (just for kicks)
     lsb_release -a
     uname -a
@@ -20,34 +44,22 @@ Optionally update apt/sources.list
     sudo aptitude dist-upgrade
 
 ## Install build tools
-    sudo aptitude install build-essential
-
-## Install SSH Server (VMWare only)
-    aptitude install ssh openssh-server
+    sudo aptitude install build-essential wget
 
 ## Setup for VMWare
 [Link to VMWare setup](vmware_setup.md)
 
-## Set up rsa authentication
-    su deploy
-    cd
-    mkdir .ssh
+## Run As Root (optional)
+You can optionally switch to root to run the following commands. Although, getting in the habit of
+using sudo isn't a bad idea either.
 
-Then from local machine:
-
-    authme hostname
-    ssh hostname
-
-Rinse and repeat any other users that you need.
-
-## Run As Root
     sudo -i
 
-## Disable SSH root login
+## Disable SSH root login (optional -- this doesn't work on 8.10?)
     sudo vi /etc/ssh/sshd_config
     Protocol 2
     PermitRootLogin no
-    sudo /etc/init.d/ssh restart
+    sudo service ssh restart
 
 ## Add .bash_profile and scripts
 You can do this manually:
@@ -68,27 +80,26 @@ Or use the .bash_profile from my box of rocks:
 
 Load .myrc if it exists
 
+    cd
     vi .profile
+
+Add this to the bottom of ~/.profile
 
     # Include .myrc if it exists
     if [ -f "$HOME/repos/box_of_rocks/dotfiles/.myrc" ]; then
         . "$HOME/repos/box_of_rocks/dotfiles/.myrc"
     fi
 
+Reload bash profile
+
     . .profile
 
-## Change Hostname
+## Change Hostname (very optional)
     hostname name
 
-## Synchronize the System Clock
-    aptitude install ntp ntpdate
-
-## Manage users
+## Manage users (optional)
     adduser kkeagy
     usermod -G admin kkeagy
-    adduser deploy
-    visudo
-    deploy ALL=(ALL) ALL # Adds sudo permissions
 
 ## SSH Security by Obscurity i.e. not really that secure (optional)
 Prevent cracker bots by setting a non-standard port.
@@ -101,82 +112,121 @@ Prevent cracker bots by setting a non-standard port.
     cd
     mkdir .ssh
 
-Copy public key authentication (executed on local machine).
-    authme ip_address
+## Apache
+    sudo aptitude install apache2-mpm-prefork apache2-prefork-dev
 
+After everything else is set up and you want to optimize apache for performance.
 
-## Install apache2
-    sudo aptitude install apache2
+    cd /etc/apache2
+    sudo vi /mods-available/deflate.conf
 
-## Install REE
-    wget http://rubyforge.org/frs/download.php/47937/ruby-enterprise-1.8.6-20081205.tar.gz
-    tar xzvf ruby-enterprise-1.8.6-20081205.tar.gz
+    <IfModule mod_deflate.c>
+      AddOutputFilterByType DEFLATE text/plain text/html text/css text/xml application/xml application/xml+rss text/javascript application/javascript
+    </IfModule>
 
-    wget http://gist.github.com/raw/33313/b556fae6a2f1a48c6acea0f350af0f1017efd379 -O patch.diff
-    cd ruby-enterprise-1.8.6-20081205 patch -p1 -E < ../patch.diff
+    sudo vi /mods-available/expires.conf
 
-    ./installer
+    ExpiresActive On
+    ExpiresByType image/gif "access plus 10 years"
+    ExpiresByType image/png "access plus 10 years"
+    ExpiresByType image/jpg "access plus 10 years"
+    ExpiresByType image/jpeg "access plus 10 years"
+    ExpiresByType text/css "access plus 10 years"
+    ExpiresByType application/javascript "access plus 10 years"
+    ExpiresByType text/xml "access plus 10 years"
+    ExpiresByType application/x-shockwave-flash "access plus 10 years"
 
-If you ever want to uninstall Ruby Enterprise Edition, simply remove this
-directory:
+    sudo a2enmod expires
 
-    /opt/ruby-enterprise-1.8.6-20081205
+    apache2ctl -t
 
-/opt/ruby-enterprise-1.8.6-20081205/bin/ruby /opt/ruby-enterprise-1.8.6-20081205/bin/gem install mysql
-
-
-## Install Phusion Passenger
-    /opt/ruby-enterprise-1.8.6-20081205/bin/passenger-install-apache2-module
-
-## Install Nginx
-    sudo aptitude install nginx
-
-    sudo /etc/init.d/nginx start
-    sudo /etc/init.d/nginx stop
-    sudo /etc/init.d/nginx restart
-
-    sudo vi /etc/nginx/sites-available/default
-    sudo vi /etc/nginx/nginx.conf
-
-    # Test configuration
-    sudo /usr/sbin/nginx -t
-
-## Configure Nginx
-    http://articles.slicehost.com/2007/12/13/ubuntu-gutsy-nginx-configuration-1
+    sudo service apache2 restart
 
 ## Ruby
-    aptitude install ruby ri rdoc irb ri1.8 ruby1.8-dev libzlib-ruby zlib1g libopenssl-ruby1.8
+    sudo aptitude install ruby ri rdoc irb ri1.8 ruby1.8-dev libzlib-ruby zlib1g libopenssl-ruby1.8
     ruby -v
 
 ## RubyGems
-    cd /usr/local/src/
-    sudo curl -LO http://rubyforge.org/frs/download.php/43985/rubygems-1.3.0.tgz
-    tar xvzf rubygems-1.3.0.tgz
-    cd rubygems-1.3.0
-    ruby setup.rb
-    cd -
+    cd
+    mkdir src
+    cd src/
+    wget http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz
+    tar xvzf rubygems-1.3.1.tgz
+    cd rubygems-1.3.1
+    sudo ruby setup.rb
+    cd ..
     rm -rf *
-    sudo ln -s /usr/bin/gem1.8 /usr/bin/gem
+    sudo ln -nfs /usr/bin/gem1.8 /usr/bin/gem
 
-## Sqlite3
+## Install Phusion Passenger
+    sudo gem install passenger --no-rdoc --no-ri
+    sudo passenger-install-apache2-module
+
+    cd /etc/apache2/
+    sudo vi mods-available/passenger.load
+
+Add these lines to passenger.load
+
+    LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-2.0.5/ext/apache2/mod_passenger.so
+    PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-2.0.5
+    PassengerRuby /usr/bin/ruby1.8
+
+Enable passenger module
+
+    sudo a2enmod passenger
+
+Create vhost and disable default site
+
+    sudo vi sites-available/[your_site]
+
+    <VirtualHost *:80>
+       ServerName www.your_site.com
+       DocumentRoot /home/deploy/[your_site]/master/current/public
+    </VirtualHost>
+
+    sudo a2ensite [your_site]
+    sudo a2dissite default
+
+Check config and then restart apache
+
+    apache2ctl -t
+    sudo service apache2 restart
+
+
+## Install REE (optional)
+    wget http://rubyforge.org/frs/download.php/47937/ruby-enterprise-1.8.6-20081205.tar.gz
+    tar xzvf ruby-enterprise-1.8.6-20081205.tar.gz
+
+Patch REE to use tcmalloc. Taken from [here](http://sethbc.org/2008/12/07/ruby-enterprise-edition-on-ubuntu-810-x86_64/).
+
+    # Cut and paste this to patch.diff
+    http://gist.github.com/raw/33313/b556fae6a2f1a48c6acea0f350af0f1017efd379
+
+    cd ruby-enterprise-1.8.6-20081205
+    patch -p1 -E < ../patch.diff
+    # Make sure there's no errors when patching
+
+Run REE installer.
+
+    sudo ./installer
+
+Create symbolic link to ruby gems
+
+    sudo ln -nfs /opt/ruby-enterprise-1.8.6-20081205/bin/gem /usr/bin/gem
+
+## Sqlite3 (optional)
     sudo aptitude install sqlite3 libsqlite3-dev
     sudo gem install sqlite3-ruby --no-rdoc --no-ri
 
 ## MySQL
     sudo aptitude install mysql-server libmysqlclient15-dev libmysqlclient15off zlib1g-dev libmysql-ruby1.8
 
-    irb
-    irb(main):001:0> require 'rubygems'
-    => true
-    irb(main):002:0> require 'mysql'
-    => true
-
 ## MySQL User(s)
     # log in as the mysql root user
     create user 'someuser'@'localhost' identified by 'somepassword';
-    grant insert, select, update, delete on db_test.* to 'someuser'@'localhost';
-    grant insert, select, update, delete on db_development.* to 'someuser'@'localhost';
-    grant insert, select, update, delet  on db_production.* to 'someuser'@'localhost';
+    grant insert, select, update, delete, drop, create, index on db_test.* to 'someuser'@'localhost';
+    grant insert, select, update, delete, drop, create, index on db_development.* to 'someuser'@'localhost';
+    grant insert, select, update, delete, drop, create, index on db_production.* to 'someuser'@'localhost';
 
 To see a list of the privileges that have been granted to a specific user:
 
@@ -186,11 +236,38 @@ To change password
 
     set password for username@localhost=password('new_password');
 
-## Rails
+## Rails and dependents
     sudo gem install rails --no-rdoc --no-ri
-    sudo gem install mongrel mongrel_cluster --no-rdoc --no-ri
     sudo gem install rspec --no-rdoc --no-ri
     sudo gem install mysql --no-rdoc --no-ri
+
+    irb
+    irb(main):001:0> require 'rubygems'
+    => true
+    irb(main):002:0> require 'mysql'
+    => true
+
+## Install Mongrel and Mongrel Cluster
+    sudo gem install mongrel --no-rdoc --no-ri
+    sudo gem install mongrel_cluster --no-rdoc --no-ri
+
+## Install Nginx
+    sudo aptitude install nginx
+
+    # Some commands to mangage nginx
+    sudo service nginx start
+    sudo service nginx stop
+    sudo service nginx restart
+    sudo service nginx status
+
+    sudo vi /etc/nginx/sites-available/default
+    sudo vi /etc/nginx/nginx.conf
+
+    # Test configuration
+    sudo /usr/sbin/nginx -t
+
+## Configure Nginx
+    http://articles.slicehost.com/2007/12/13/ubuntu-gutsy-nginx-configuration-1
 
 ## ImageMagick and RMagick
     aptitude install imagemagick librmagick-ruby1.8 libfreetype6-dev xml-core
@@ -242,13 +319,10 @@ Restart ftp server and test
     ftp userftp@host
     ssh userftp@host
 
-## Update locate db
+## Update locate db (optional)
     updatedb
 
 ## Welcome Banner
 Create ascii banner [here](http://patorjk.com/software/taag/). (stampatello)
 
     vi /etc/motd
-
-## Upgrade ubuntu to newest release (e.g. 8.04 - 8.10)
-    sudo do-release-upgrade
