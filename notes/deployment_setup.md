@@ -30,16 +30,12 @@ private.
     vi database.yml
     [insert db config]
 
-Load schema. Warning: this is destructive.
-
-    cd to current/
-    rake RAILS_ENV=production db:schema:load
-
-
 ## Add public key to github repo
 If your repo is private you'll need to
 [add your public key](http://github.com/guides/providing-your-ssh-key#linux) so you can pull in the
 code.
+
+You might have to clone the repo one time on the server to cache github.com to known_hosts.
 
 ## Pushing the Code, Kicking the Tires
 This will copy your source code to the server, and update the “current” symlink to point to it, but
@@ -53,6 +49,11 @@ seems like there are always little edge cases that slip through the cracks. Fix 
 trying “deploy:update” until it succeeds.
 
     cap deploy:update
+
+Load schema. Warning: this is destructive.
+
+    cd to current/
+    rake app:db:reset RAILS_ENV=production
 
 Once that’s done, we can test to see that our application will actually load by starting up a
 console instance:

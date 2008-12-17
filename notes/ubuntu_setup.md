@@ -9,7 +9,8 @@ http://users.piuha.net/martti/comp/ubuntu/en/server.html
 ## Create deploy user with sudo permissions
     adduser deploy
     visudo
-    deploy ALL=(ALL) ALL # Adds sudo permissions
+    # Add sudo permissions to deploy user
+    deploy ALL=(ALL) ALL
 
 ## Set up rsa authentication
     su - deploy
@@ -67,28 +68,27 @@ using sudo isn a better idea.
     sudo -i
 
 ## Add .bash_profile and scripts
-You can do this manually:
+You can do this manually (manual - not recommened):
 
     vi /etc/skel/.bashrc
     vi /etc/profile
     exit
     vi ~/.bashrc
 
-Or use the .bash_profile from my box of rocks:
+Or use the .myrc from my box of rocks (recommended):
 
     sudo aptitude install git-core
     mkdir repos
     cd repos
     git clone git://github.com/keolo/box_of_rocks.git
-    git config --global user.email keolo@dreampointmedia.com
-    git config --global user.name "Keolo Keagy"
 
 Load .myrc if it exists
 
     cd
     vi .profile
 
-Add this to the bottom of ~/.profile
+Add this to the bottom of ~/.profile. Optionally, you can comment out loading .bashrc if you don't
+want the ubuntu defaults like color highlighting (I like to comment it out).
 
     # Include .myrc if it exists
     if [ -f "$HOME/repos/box_of_rocks/dotfiles/.myrc" ]; then
@@ -99,25 +99,11 @@ Reload bash profile
 
     . .profile
 
-## Change Hostname (very optional)
-    hostname name
-
 ## Manage users (optional)
     adduser kkeagy
     usermod -G admin kkeagy
 
-## SSH Security by Obscurity i.e. not really that secure (optional)
-Prevent cracker bots by setting a non-standard port.
-
-    vi /etc/ssh/ssh_config
-    port 8888 # or any unused port above 1024
-    /etc/init.d/ssh reload
-
-    su kkeagy
-    cd
-    mkdir .ssh
-
-## Apache
+## Apache (only install this if you're going to use passenger!)
     sudo aptitude install apache2-mpm-prefork apache2-prefork-dev
 
 After everything else is set up and you want to optimize apache for performance.
@@ -160,8 +146,9 @@ After everything else is set up and you want to optimize apache for performance.
     cd rubygems-1.3.1
     sudo ruby setup.rb
     cd ..
-    rm -rf *
+    rm -rf rubygems*
     sudo ln -nfs /usr/bin/gem1.8 /usr/bin/gem
+    gem -v
 
 ## Install Phusion Passenger
     sudo gem install passenger --no-rdoc --no-ri
@@ -226,24 +213,10 @@ Create symbolic link to ruby gems
 ## MySQL
     sudo aptitude install mysql-server libmysqlclient15-dev libmysqlclient15off zlib1g-dev libmysql-ruby1.8
 
-## MySQL User(s)
-    # log in as the mysql root user
-    create user 'someuser'@'localhost' identified by 'somepassword';
-    grant insert, select, update, delete, drop, create, index on db_test.* to 'someuser'@'localhost';
-    grant insert, select, update, delete, drop, create, index on db_development.* to 'someuser'@'localhost';
-    grant insert, select, update, delete, drop, create, index on db_production.* to 'someuser'@'localhost';
-
-To see a list of the privileges that have been granted to a specific user:
-
-    select * from mysql.user where User='user' \G
-
-To change password
-
-    set password for username@localhost=password('new_password');
-
 ## Rails and dependents
     sudo gem install rails --no-rdoc --no-ri
     sudo gem install rspec --no-rdoc --no-ri
+    sudo gem install rspec-rails --no-rdoc --no-ri
     sudo gem install mysql --no-rdoc --no-ri
 
     irb
@@ -265,6 +238,10 @@ To start mongrel cluster on boot, copy the mongrel_cluster script file to `/etc/
     3. sudo chmod +x /etc/init.d/mongrel_cluster
     4. Add to init.d startup. On ubuntu: “sudo update-rc.d mongrel_cluster defaults”
     5. Comment out the “USER=mongrel” line and the “chown $USER:$USER $PID_DIR” in mongrel_cluster.
+       sudo vi /etc/init.d/mongrel_cluster
+    6. Test if it works (might want to try rebooting to see if that works too)
+       sudo service mongrel_cluster status
+       sudo reboot
 
 ## Install Nginx
     sudo aptitude install nginx
@@ -275,14 +252,85 @@ To start mongrel cluster on boot, copy the mongrel_cluster script file to `/etc/
     sudo service nginx restart
     sudo service nginx status
 
-    sudo vi /etc/nginx/sites-available/default
-    sudo vi /etc/nginx/nginx.conf
+    # Start nginx
+    sudo service nginx start
 
-    # Test configuration
+Type your server's ip into a web browser. You should see a message that nginx is working.
+
+If you have some nginx templates copy them to these files or create your own. These are synonymous
+to apache vhosts.
+
+    cd /etc/nginx
+    sudo cp nginx.conf nginx.orig.conf
+    sudo vi nginx.conf
+    sudo vi sites-available/yoursite
+
+Enable your site and disable the default.
+
+    sudo ln -nfs /etc/nginx/sites-available/yoursite sites-enabled/
+    sudo rm sites-enabled/default
+
+Test the configuration and reload the nginx configs.
+
     sudo /usr/sbin/nginx -t
+    sudo service reload
+
+Create a test file in the directory specified by the document root in your nginx vhost config.
+
+    mkdir -p ~/yoursite/master/current/public
+    vi ~/yoursite/master/current/public/index.html
+
+Insert some text into index.html and type your server's ip into a web browser. You should see your
+text if everything is working correctly.
 
 ## Configure Nginx
     http://articles.slicehost.com/2007/12/13/ubuntu-gutsy-nginx-configuration-1
+
+## Application Setup
+Pull in project from github. Before we set up capistrano it's a good idea to test your application
+stack.
+
+If your repo is private you'll need to
+[add your public key](http://github.com/guides/providing-your-ssh-key#linux) so you can pull in the
+code.
+
+Once that's done clone your repo to the document root specified in the nginx vhost config.
+
+    cd ~/yoursite/master
+    rm -rf current
+    git clone git@github.com:you/yourproject.git current
+    cd current
+
+## MySQL Setup
+    cp config/database.template.yml config/database.yml
+    # Update database config
+    vi config/database.yml
+
+    # Log in as the mysql root user
+    create user someuser@localhost identified by 'somepassword';
+    grant insert, select, update, delete, drop, create, index on db_test.* to someuser@localhost;
+    grant insert, select, update, delete, drop, create, index on db_development.* to someuser@localhost;
+    grant insert, select, update, delete, drop, create, index on db_production.* to someuser@localhost;
+
+    # To change password
+    set password for username@localhost=password('new_password');
+
+    # Try logging in as the new user. Should see the above databases.
+    rake db:create:all
+    mysql -u someuser -p    or   ./script/dbconsole
+    show databases;
+
+    rake db:migrate RAILS_ENV=production
+
+## Mongrel Cluster Setup
+If you set up mongrel_cluster as a service all you have to do is create a symbolic link.
+
+    sudo ln -nfs ~/yoursite/master/current/config/mongrel/production.yml /etc/mongrel_cluster
+    sudo service mongrel_cluster start
+    sudo service mongrel_cluster status
+    sudo service nginx status
+
+Point your browser to your server's ip and all should be working.
 
 ## ImageMagick and RMagick
     aptitude install imagemagick librmagick-ruby1.8 libfreetype6-dev xml-core
@@ -354,3 +402,7 @@ You should also create an A record for yourname.yourdomain.com in your DNS manag
 Create ascii banner [here](http://patorjk.com/software/taag/). (stampatello)
 
     vi /etc/motd
+
+## Vim
+If vim-tiny isn't enough for you. You can try vim-nox.
+    sudo aptitude install vim-nox

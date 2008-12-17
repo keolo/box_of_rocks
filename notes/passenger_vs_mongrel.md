@@ -10,21 +10,35 @@ Tested with:
    cold start is required again.
  * If you have less than 1GB of RAM, Passenger is likely to swap memory (even after tweaking apache
    prefork settings). This can drasticly hurt your app's performance on a vps.
- * Rebooting will restart apache and thus passenger. No need for god or startup scripts.
  * Log rotation is cleaner?
  * Tied to REE version of ruby
  * Don't need to manage mongrel clusters
+ * When the vm started swaping I was getting 25 req/sec or timeouts. After tweaking the prefork
+   config in httpd.conf, performance was around 125 req/sec. Some swaping still occured though.
+   reduce the amount of swaping
+ * Response times were miliseconds slower than Nginx + Mongrel.
+
+Tweaks to prefork module in httpd.conf to help trim memory consumption.
+
+    <IfModule prefork.c>
+        StartServers 1
+        MinSpareServers 5
+        MaxSpareServers 10
+        MaxClients 150
+        MaxRequestsPerChild 0
+    </IfModule>
 
 
 ### Nginx 0.5.33 + Mongrel + ubuntu-minimal 8.04 64bit
 
  * First request is sub second
  * Runs fine on 360MB of RAM - no swaping
- * Rebooting machine does not automatically restart mongrel. Requires god or restart script.
  * Log rotation might be troublesome?
  * Long running process locks up mongrel
  * Can run newer versions of ruby (good for security)
  * Need to manage mongrel clusters
+ * Performance was around 110-125 req/sec consistently.
+ * Response times were a few miliseconds faster than Apache + Passenger.
 
 
 ## Lazy Testing
