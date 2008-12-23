@@ -113,6 +113,18 @@ alias gst='git status'
 alias gw='git whatchanged'
 alias gr='git rebase'
 
+# Nginx
+alias nst='sudo service nginx status'
+alias nrestart='sudo service nginx restart'
+alias nstart='sudo service nginx start'
+alias nstop='sudo service nginx stop'
+
+# Mongrel
+alias mst='sudo service mongrel_cluster status'
+alias mrestart='sudo service mongrel_cluster restart'
+alias mstart='sudo service mongrel_cluster start'
+alias mstop='sudo service mongrel_cluster stop'
+
 # Copy public ssh key to remote host
 # Usage: authme username@host.com
 function authme {
