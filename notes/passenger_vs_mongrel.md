@@ -24,7 +24,7 @@ Tweaks to prefork module in httpd.conf to help trim memory consumption.
         StartServers 1
         MinSpareServers 5
         MaxSpareServers 10
-        MaxClients 150
+        MaxClients 150 # Should set to 2 or 3?
         MaxRequestsPerChild 0
     </IfModule>
 

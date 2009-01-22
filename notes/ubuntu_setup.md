@@ -308,9 +308,9 @@ Once that's done clone your repo to the document root specified in the nginx vho
 
     # Log in as the mysql root user
     create user someuser@localhost identified by 'somepassword';
-    grant insert, select, update, delete, drop, create, index on db_test.* to someuser@localhost;
-    grant insert, select, update, delete, drop, create, index on db_development.* to someuser@localhost;
-    grant insert, select, update, delete, drop, create, index on db_production.* to someuser@localhost;
+    grant insert, select, update, delete, drop, create, alter, index on db_test.* to someuser@localhost;
+    grant insert, select, update, delete, drop, create, alter, index on db_development.* to someuser@localhost;
+    grant insert, select, update, delete, drop, create, alter, index on db_production.* to someuser@localhost;
 
     # To change password
     set password for username@localhost=password('new_password');
@@ -351,12 +351,14 @@ Point your browser to your server's ip and all should be working.
     sudo gem install image_science --no-rdoc --no-ri
 
 ## vsftpd (ftp server)
+[vsftpd](http://en.gentoo-wiki.com/wiki/Vsftpd)
+
     sudo aptitude install vsftpd
 
 Test (from client)
 
     ftp anonymous@server
-    dir
+    ls -la
 
 Add false shell
 
@@ -370,15 +372,20 @@ Edit config
     local_enable=YES
     write_enable=YES
     chroot_local_user=YES
+    local_umask=002
 
-Create user with no shell
+Create ftp group
 
-    sudo useradd userftp -d /home/userftp -s /bin/false
+    sudo groupadd ftp
+
+Create user with no shell and the primary group ftp
+
+    sudo useradd userftp -d /home/userftp -s /bin/false -g ftp
     sudo passwd userftp
 
 Restart ftp server and test
 
-    sudo /etc/init.d/vsftpd restart
+    sudo service vsftpd restart
     ftp userftp@host
     ssh userftp@host
 
@@ -405,4 +412,5 @@ Create ascii banner [here](http://patorjk.com/software/taag/). (stampatello)
 
 ## Vim
 If vim-tiny isn't enough for you. You can try vim-nox.
+
     sudo aptitude install vim-nox
