@@ -389,6 +389,58 @@ Restart ftp server and test
     ftp userftp@host
     ssh userftp@host
 
+
+## Oniguruma
+Oniguruma is a regex library that is better than the one built into Ruby 1.8.
+It supports named groups, look-ahead, look-behind, and other cool features!
+This libraby is supposedly baked into Ruby 1.9.
+
+    # Installation (for Ruby 1.8)
+    curl -LO http://www.geocities.jp/kosako3/oniguruma/archive/onig-5.9.1.tar.gz
+    tar zxf onig-5.9.1.tar.gz
+    cd onig-5.9.1
+    ./configure --prefix=/usr/local
+    sudo make
+    sudo make install
+    sudo gem install oniguruma
+
+    # Synopsis:
+    reg = Oniguruma::ORegex.new( '(?<before>.*)(a)(?<after>.*)' )
+    match = reg.match( 'terraforming' )
+    puts match[0]         <= 'terraforming'
+    puts match[:before]   <= 'terr'
+    puts match[:after]    <= 'forming'
+
+## Thinking Sphinx
+First install Sphinx.
+
+    curl -LO http://www.sphinxsearch.com/downloads/sphinx-0.9.8.1.tar.gz
+    tar zxvf sphinx-0.9.8.1.tar.gz
+    cd sphinx-0.9.8.1
+    ./configure
+    make
+    sudo make install
+
+Install Thinking Sphinx plugin
+
+    script/plugin install git://github.com/freelancing-god/thinking-sphinx.git
+
+Write code then update Capistrano tasks
+
+    http://www.updrift.com/article/deploying-a-rails-app-with-thinking-sphinx
+
+Deploy then create cron
+
+    PATH=/usr/local/bin:/usr/bin:/bin
+    SHELL=/bin/bash
+    
+    # Index Thinking Sphinx Search Engine every 20 mins and start if server is
+    # rebooted.
+    # m        h dom mon dow   command
+      02,22,42 * *   *   *     cd /home/deploy/hmc/master/current && rake thinking_sphinx:index RAILS_ENV=production >> /dev/null 2>&1
+      @reboot                  cd /home/deploy/hmc/master/current && rake thinking_sphinx:start RAILS_ENV=production >> /dev/null 2>&1
+
+
 ## Update locate db (optional)
     updatedb
 

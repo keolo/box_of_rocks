@@ -1,6 +1,9 @@
 # VMWare Setup
 These are instructions for setting up Ubuntu on VMWare.
 
+## Using VMWare for local development
+http://loriholden.com/archives/2008/12/06/14-seamless-integration-of-virtual-machine-and-host-for-easier-development
+
 ## Install SSH Server
     aptitude install ssh openssh-server
 

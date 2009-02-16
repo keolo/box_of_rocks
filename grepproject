@@ -2,4 +2,4 @@
 
 # Search a directory recursively for search pattern ($1)
 # TODO: Add other filetypes
-grep -n "$1" $(find . -name *.rb -or -name *.erb | grep -v '\.git')
+grep -n "$1" $(find . -name *.rb -or -name *.erb -or -name *.js -or -name *.css | grep -v '\.git')
