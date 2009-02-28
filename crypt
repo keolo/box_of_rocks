@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+require 'digest/sha1'
+
+# Get message to hash
+if !$*.empty?
+  message = $*.to_s.chomp
+else
+  puts 'Enter message to be hashed:'
+  message = STDIN.gets.chomp
+end
+
+puts Digest::SHA256.hexdigest(message)
