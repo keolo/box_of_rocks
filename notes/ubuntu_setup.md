@@ -380,7 +380,7 @@ Create ftp group
 
 Create user with no shell and the primary group ftp
 
-    sudo useradd userftp -d /home/userftp -s /bin/false -g ftp
+    sudo useradd userftp -d /home/userftp -s /bin/false
     sudo passwd userftp
 
 Restart ftp server and test
