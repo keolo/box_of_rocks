@@ -463,6 +463,13 @@ Create ascii banner [here](http://patorjk.com/software/taag/). (stampatello)
     vi /etc/motd
 
 ## Vim
-If vim-tiny isn't enough for you. You can try vim-nox.
+If vim-tiny is not enough for you. You can try vim-nox.
 
     sudo aptitude install vim-nox
+
+## OCRopus
+Install via intructions here.
+    http://sites.google.com/site/ocropus/install-mercurial
+    * Change 'apt-get' to 'aptitude' in ocropus/ubuntu
+    * I also had to copy ocr-dict-case.fst to default.fst because it was
+      causing an error.
