@@ -13,7 +13,7 @@
 #    whois server with checks.
 #  * Add other TLDs
 class DomainSearch
-  attr_accessor :tld, :dictionary, :min_word_size#, :whois_delay
+  attr_accessor :tld, :pattern, :dictionary, :min_word_size#, :whois_delay
 
   # attr_accessor defaults
   def dictionary
@@ -30,6 +30,7 @@ class DomainSearch
 
   def initialize
     # raise 'Called abstract class: DomainSearch'
+    # @tld = tld
   end
 
   def available_domains
@@ -40,7 +41,7 @@ class DomainSearch
   end
 
   def word_list
-    `cat #{dictionary}`.split("\n").grep(/#{tld}$/)
+    `cat #{dictionary}`.split("\n").grep(/#{@tld}$/)
   end
 
   def filter_word_list
@@ -48,51 +49,64 @@ class DomainSearch
   end
 
   def convert_word_to_domain_name
-    @domains = @words.each{|word| word.sub!(/#{tld}$/, ".#{tld}")}
+    @domains = @words.each{|word| word.sub!(/#{@tld}$/, ".#{@tld}")}
   end
 
   def check_whois
-    raise 'Called abstract method: DomainSearch#check_whois'
-  end
-end
+    #raise 'Called abstract method: DomainSearch#check_whois'
+    puts "#{@domains.size} words match this tld."
 
-
-class DomainSearchCa < DomainSearch
-  def tld
-    'ca'
-  end
-
-  def check_whois
     @available_domains = []
     @domains.each do |domain|
       status = `whois #{domain}`
-      if status =~ /Status:         AVAIL/
-        @available_domains << domain
-      end
-    end
-    @available_domains
-  end
-end
-
-
-class DomainSearchCom < DomainSearch
-  def tld
-    'com'
-  end
-
-  def check_whois
-    @available_domains = []
-    @domains.each do |domain|
-      status = `whois #{domain}`
-      if status =~ /!Unknown host/
+      if status =~ @pattern
+        puts "#{domain} available"
         @available_domains << domain
       else
-        @available_domains << domain + ' not avail.'
+        puts "#{domain} not available"
       end
     end
     @available_domains
   end
 end
+
+
+#class DomainSearchCa < DomainSearch
+#  def tld
+#    'ca'
+#  end
+#
+#  def check_whois
+#    @available_domains = []
+#    @domains.each do |domain|
+#      status = `whois #{domain}`
+#      if status =~ /Status:         AVAIL/
+#        @available_domains << domain
+#      end
+#    end
+#    @available_domains
+#  end
+#end
+#
+#
+#class DomainSearchCom < DomainSearch
+#  def tld
+#    'com'
+#  end
+#
+#  def check_whois
+#    @available_domains = []
+#    @domains.each do |domain|
+#      status = `whois #{domain}`
+#      if status =~ /!Unknown host/
+#        @available_domains << domain
+#      else
+#        @available_domains << domain + ' not avail.'
+#      end
+#    end
+#    @available_domains
+#  end
+#end
 
 # domain_search = DomainSearchCa.new
 # domain_search.dictionary = '/usr/share/dict/wordy' # Optionally change dictionary
@@ -100,7 +114,10 @@ end
 # domain_search.min_word_size = 17
 # puts domain_search.available_domains
 
-domain_search = DomainSearchCom.new
+domain_search = DomainSearch.new
+domain_search.tld = 'net'
+domain_search.pattern = /No match/
 domain_search.min_word_size = 7
-puts domain_search.word_list
-puts domain_search.available_domains
+puts domain_search.filter_word_list
+puts '--------'
+domain_search.available_domains
