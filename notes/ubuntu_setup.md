@@ -56,7 +56,7 @@ Optionally update apt/sources.list
     sudo aptitude dist-upgrade
 
 ## Install build tools
-    sudo aptitude install build-essential wget
+    sudo aptitude install build-essential curl
 
 ## Setup for VMWare
 [Link to VMWare setup](vmware_setup.md)
@@ -141,9 +141,9 @@ After everything else is set up and you want to optimize apache for performance.
     cd
     mkdir src
     cd src/
-    wget http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz
-    tar xvzf rubygems-1.3.1.tgz
-    cd rubygems-1.3.1
+    curl -LO http://rubyforge.org/frs/download.php/57643/rubygems-1.3.4.tgz
+    tar xvzf rubygems-1.3.4.tgz
+    cd rubygems-1.3.4
     sudo ruby setup.rb
     cd ..
     rm -rf rubygems*
@@ -405,11 +405,12 @@ This libraby is supposedly baked into Ruby 1.9.
     sudo gem install oniguruma
 
     # Synopsis:
-    reg = Oniguruma::ORegex.new( '(?<before>.*)(a)(?<after>.*)' )
-    match = reg.match( 'terraforming' )
-    puts match[0]         <= 'terraforming'
-    puts match[:before]   <= 'terr'
-    puts match[:after]    <= 'forming'
+    reg = Oniguruma::ORegex.new('(?<before>.*)(a)(?<after>.*)')
+    match = reg.match('terraforming')
+    puts match[0]       <= 'terraforming'
+    puts match[:before] <= 'terr'
+    puts match[:after]  <= 'forming'
+
 
 ## Thinking Sphinx
 First install Sphinx.
