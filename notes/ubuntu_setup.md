@@ -89,36 +89,6 @@ Reload bash profile
     adduser kkeagy
     usermod -G admin kkeagy
 
-### Apache (only install this if you're going to use passenger!)
-    sudo aptitude install apache2-mpm-prefork apache2-prefork-dev
-
-After everything else is set up and you want to optimize apache for performance.
-
-    cd /etc/apache2
-    sudo vi /mods-available/deflate.conf
-
-    <IfModule mod_deflate.c>
-      AddOutputFilterByType DEFLATE text/plain text/html text/css text/xml application/xml application/xml+rss text/javascript application/javascript
-    </IfModule>
-
-    sudo vi /mods-available/expires.conf
-
-    ExpiresActive On
-    ExpiresByType image/gif "access plus 10 years"
-    ExpiresByType image/png "access plus 10 years"
-    ExpiresByType image/jpg "access plus 10 years"
-    ExpiresByType image/jpeg "access plus 10 years"
-    ExpiresByType text/css "access plus 10 years"
-    ExpiresByType application/javascript "access plus 10 years"
-    ExpiresByType text/xml "access plus 10 years"
-    ExpiresByType application/x-shockwave-flash "access plus 10 years"
-
-    sudo a2enmod expires
-
-    apache2ctl -t
-
-    sudo service apache2 restart
-
 ### Ruby
     sudo aptitude install ruby ri rdoc irb ri1.8 ruby1.8-dev libzlib-ruby zlib1g libopenssl-ruby1.8
     ruby -v
@@ -136,9 +106,6 @@ After everything else is set up and you want to optimize apache for performance.
     sudo ln -nfs /usr/bin/gem1.8 /usr/bin/gem
     gem -v
 
-### Sqlite3 (optional)
-    sudo aptitude install sqlite3 libsqlite3-dev
-    sudo gem install sqlite3-ruby --no-rdoc --no-ri
 
 ### MySQL
     sudo aptitude install mysql-server libmysqlclient15-dev libmysqlclient15off zlib1g-dev libmysql-ruby1.8
@@ -262,23 +229,6 @@ If you set up mongrel_cluster as a service all you have to do is create a symbol
 
 Point your browser to your server's ip and all should be working.
 
-### ImageMagick and RMagick
-    aptitude install imagemagick librmagick-ruby1.8 libfreetype6-dev xml-core
-    irb(main):003:0> require 'RMagick'
-    => true
-    irb(main):004:0> include Magick
-    => Object
-    irb(main):005:0> img = ImageList.new 'test.jpg'
-    => [test.jpg JPEG 690x430 690x430+0+0 DirectClass 8-bit 47kb]
-    scene=0
-    irb(main):006:0> img.write 'test.png'
-    => [test.jpg=>test.png JPEG 690x430 690x430+0+0 DirectClass 8-bit 393kb]
-    scene=0
-
-### ImageScience and FreeImage
-    sudo aptitude install libfreeimage-dev
-    sudo gem install RubyInline --no-rdoc --no-ri
-    sudo gem install image_science --no-rdoc --no-ri
 
 ### [Production] vsftpd (ftp server)
 [vsftpd](http://en.gentoo-wiki.com/wiki/Vsftpd)
@@ -320,28 +270,6 @@ Restart ftp server and test
     ssh userftp@host
 
 
-### Oniguruma
-Oniguruma is a regex library that is better than the one built into Ruby 1.8.
-It supports named groups, look-ahead, look-behind, and other cool features!
-This libraby is supposedly baked into Ruby 1.9.
-
-    # Installation (for Ruby 1.8)
-    curl -LO http://www.geocities.jp/kosako3/oniguruma/archive/onig-5.9.1.tar.gz
-    tar zxf onig-5.9.1.tar.gz
-    cd onig-5.9.1
-    ./configure --prefix=/usr/local
-    sudo make
-    sudo make install
-    sudo gem install oniguruma
-
-    # Synopsis:
-    reg = Oniguruma::ORegex.new('(?<before>.*)(a)(?<after>.*)')
-    match = reg.match('terraforming')
-    puts match[0]       <= 'terraforming'
-    puts match[:before] <= 'terr'
-    puts match[:after]  <= 'forming'
-
-
 ### Thinking Sphinx
 First install Sphinx.
 
@@ -372,9 +300,11 @@ Deploy then create cron
       @reboot                  cd /home/deploy/hmc/master/current && rake thinking_sphinx:start RAILS_ENV=production >> /dev/null 2>&1
 
 
-
 ## The following are optional
 
+### Sqlite3 (optional)
+    sudo aptitude install sqlite3 libsqlite3-dev
+    sudo gem install sqlite3-ruby --no-rdoc --no-ri
 
 ### Update locate db
     updatedb
@@ -392,6 +322,27 @@ hostname.
 You should also create an A record for yourname.yourdomain.com in your DNS manager.
 
 
+### Oniguruma
+Oniguruma is a regex library that is better than the one built into Ruby 1.8.
+It supports named groups, look-ahead, look-behind, and other cool features!
+This libraby is supposedly baked into Ruby 1.9.
+
+    # Installation (for Ruby 1.8)
+    curl -LO http://www.geocities.jp/kosako3/oniguruma/archive/onig-5.9.1.tar.gz
+    tar zxf onig-5.9.1.tar.gz
+    cd onig-5.9.1
+    ./configure --prefix=/usr/local
+    sudo make
+    sudo make install
+    sudo gem install oniguruma
+
+    # Synopsis:
+    reg = Oniguruma::ORegex.new('(?<before>.*)(a)(?<after>.*)')
+    match = reg.match('terraforming')
+    puts match[0]       <= 'terraforming'
+    puts match[:before] <= 'terr'
+    puts match[:after]  <= 'forming'
+
 ### Welcome Banner
 Create ascii banner [here](http://patorjk.com/software/taag/). (stampatello)
 
@@ -408,3 +359,21 @@ Install via intructions here.
     * Change 'apt-get' to 'aptitude' in ocropus/ubuntu
     * I also had to copy ocr-dict-case.fst to default.fst because it was
       causing an error.
+
+### ImageMagick and RMagick
+    aptitude install imagemagick librmagick-ruby1.8 libfreetype6-dev xml-core
+    irb(main):003:0> require 'RMagick'
+    => true
+    irb(main):004:0> include Magick
+    => Object
+    irb(main):005:0> img = ImageList.new 'test.jpg'
+    => [test.jpg JPEG 690x430 690x430+0+0 DirectClass 8-bit 47kb]
+    scene=0
+    irb(main):006:0> img.write 'test.png'
+    => [test.jpg=>test.png JPEG 690x430 690x430+0+0 DirectClass 8-bit 393kb]
+    scene=0
+
+### ImageScience and FreeImage
+    sudo aptitude install libfreeimage-dev
+    sudo gem install RubyInline --no-rdoc --no-ri
+    sudo gem install image_science --no-rdoc --no-ri

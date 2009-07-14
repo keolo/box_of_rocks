@@ -53,3 +53,33 @@ Run REE installer.
 Create symbolic link to ruby gems
 
     sudo ln -nfs /opt/ruby-enterprise-1.8.6-20081205/bin/gem /usr/bin/gem
+
+### Apache
+    sudo aptitude install apache2-mpm-prefork apache2-prefork-dev
+
+After everything else is set up and you want to optimize apache for performance.
+
+    cd /etc/apache2
+    sudo vi /mods-available/deflate.conf
+
+    <IfModule mod_deflate.c>
+      AddOutputFilterByType DEFLATE text/plain text/html text/css text/xml application/xml application/xml+rss text/javascript application/javascript
+    </IfModule>
+
+    sudo vi /mods-available/expires.conf
+
+    ExpiresActive On
+    ExpiresByType image/gif "access plus 10 years"
+    ExpiresByType image/png "access plus 10 years"
+    ExpiresByType image/jpg "access plus 10 years"
+    ExpiresByType image/jpeg "access plus 10 years"
+    ExpiresByType text/css "access plus 10 years"
+    ExpiresByType application/javascript "access plus 10 years"
+    ExpiresByType text/xml "access plus 10 years"
+    ExpiresByType application/x-shockwave-flash "access plus 10 years"
+
+    sudo a2enmod expires
+
+    apache2ctl -t
+
+    sudo service apache2 restart
