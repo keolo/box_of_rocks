@@ -51,7 +51,7 @@ Optionally update apt/sources.list
     sudo aptitude install build-essential curl
 
 ### Setup for VMWare
-[Link to VMWare setup](vmware_setup.md)
+[VMWare setup](vmware_setup.md)
 
 ### Add .bash_profile and scripts
 You can do this manually (manual - not recommened):
@@ -302,7 +302,7 @@ Deploy then create cron
 
 ## The following are optional
 
-### Sqlite3 (optional)
+### Sqlite3
     sudo aptitude install sqlite3 libsqlite3-dev
     sudo gem install sqlite3-ruby --no-rdoc --no-ri
 
