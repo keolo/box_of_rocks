@@ -6,6 +6,9 @@ Download and install [Ubuntu Minimal Server 64bit version](https://help.ubuntu.c
 
 http://users.piuha.net/martti/comp/ubuntu/en/server.html
 
+### Install openssh (vmware only)
+    sudo aptitude install openssh-server
+
 ### Create deploy user with sudo permissions
     adduser deploy
     visudo
@@ -198,7 +201,7 @@ Once that's done clone your repo to the document root specified in the nginx vho
     git clone git@github.com:you/yourproject.git current
     cd current
 
-### MySQL Setup
+### [Production] MySQL Setup
     cp config/database.template.yml config/database.yml
     # Update database config
     vi config/database.yml
@@ -219,7 +222,7 @@ Once that's done clone your repo to the document root specified in the nginx vho
 
     rake db:migrate RAILS_ENV=production
 
-### [Production] Mongrel Cluster Setup
+### Mongrel Cluster Setup
 If you set up mongrel_cluster as a service all you have to do is create a symbolic link.
 
     sudo ln -nfs ~/yoursite/master/current/config/mongrel/production.yml /etc/mongrel_cluster
