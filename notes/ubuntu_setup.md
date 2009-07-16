@@ -125,7 +125,7 @@ Reload bash profile
     irb(main):002:0> require 'mysql'
     => true
 
-### [Production] Install Mongrel and Mongrel Cluster
+### Install Mongrel and Mongrel Cluster
     sudo gem install mongrel --no-rdoc --no-ri
     sudo gem install mongrel_cluster --no-rdoc --no-ri
 
@@ -222,7 +222,7 @@ Once that's done clone your repo to the document root specified in the nginx vho
 
     rake db:migrate RAILS_ENV=production
 
-### Mongrel Cluster Setup
+### [Production] Mongrel Cluster Setup
 If you set up mongrel_cluster as a service all you have to do is create a symbolic link.
 
     sudo ln -nfs ~/yoursite/master/current/config/mongrel/production.yml /etc/mongrel_cluster
