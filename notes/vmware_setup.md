@@ -5,7 +5,7 @@ These are instructions for setting up Ubuntu on VMWare.
 http://loriholden.com/archives/2008/12/06/14-seamless-integration-of-virtual-machine-and-host-for-easier-development
 
 ## Install SSH Server
-    aptitude install ssh openssh-server
+    sudo aptitude install ssh openssh-server
 
 ## Login Via SSH (VMWare only)
 Set VMWare networking to bridged. Might need to restart networking.
@@ -25,15 +25,17 @@ http://www.cyberciti.biz/tips/howto-ubuntu-linux-convert-dhcp-network-configurat
 
 ## Install VMWare tools (VMWare only)
 ### amd64 users
-    aptitude install ia32-libs
+    sudo aptitude install ia32-libs
 
-    aptitude install build-essential linux-headers-server libgtk2.0-dev
-    aptitude install libproc-dev libdumbnet-dev xorg-dev libicu38 libicu-dev
+    sudo aptitude install build-essential linux-headers-server libgtk2.0-dev
+    sudo aptitude install libproc-dev libdumbnet-dev xorg-dev libicu38 libicu-dev
 
-    cd /usr/local/src/
-    wget http://downloads.sourceforge.net/open-vm-tools/open-vm-tools-2008.07.01-102166.tar.gz?modtime=1214928542&big_mirror=0
-    tar xvzf open-vm-tools-2008.05.15-93241.tar.gz
-    cd open-vm-tools-2008.05.15-93241/
+    sudo aptitude install linux-headers-$(uname -r)
+
+    cd ~/src/
+    curl -LO http://downloads.sourceforge.net/project/open-vm-tools/open-vm-tools/2009.07.22/open-vm-tools-2009.07.22-179896.tar.gz
+    tar xvzf open-vm-tools-2009.07.22-179896.tar.gz
+    cd open-vm-tools-2009.07.22-179896/
     ./configure && make
     cd modules/linux/
     for i in *; do mv ${i} ${i}-only; tar -cf ${i}.tar ${i}-only; done
@@ -42,10 +44,10 @@ Virtual Machine > Install VMWare Tools
 
     mount /cdrom
 
-    cd /usr/local/src
+    cd ~/src
     sudo cp /cdrom/VMwareTools-*.tar.gz .
     sudo tar xf VMwareTools-*.tar.gz
-    mv -f open-vm-tools-2008.05.15-93241/modules/linux/*.tar vmware-tools-distrib/lib/modules/source/
+    sudo mv -f open-vm-tools-2009.07.22-179896/modules/linux/*.tar vmware-tools-distrib/lib/modules/source/
     sudo ./vmware-tools-distrib/vmware-install.pl
 
 Make sure there are no errors/failures. Shared directories should work after restart.
