@@ -85,6 +85,7 @@ export HISTIGNORE
 export HISTCONRTOL
 export HISTFILESIZE
 export HISTSIZE
+export HISTTIMEFORMAT="%F %T "
 
 
 # Aliases
