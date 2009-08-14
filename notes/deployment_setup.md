@@ -1,6 +1,12 @@
 # Deploying with Capistrano and Git/Github
 Make sure you have the capistrano gem installed on your local machine and a github account.
 
+## Install gems and capify
+    sudo gem install capistrano --no-ri --no-rdoc
+    sudo gem install capistrano-ext --no-ri --no-rdoc
+
+    capify .
+
 ## Setup
 After running capify and setting up deploy.rb you can check your connection settings by running:
 
