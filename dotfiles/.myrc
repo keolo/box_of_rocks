@@ -41,7 +41,7 @@ case `uname` in
   Darwin*)
     PS1="${TITLEBAR}$CYAN>$NO_COLOR ";;
   *)
-    PS1="${TITLEBAR}$GREEN<$NO_COLOR ";;
+    PS1="${TITLEBAR}$GREEN>$NO_COLOR ";;
 esac
 
 
