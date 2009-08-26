@@ -283,13 +283,13 @@ First install Sphinx.
     make
     sudo make install
 
-Install Thinking Sphinx plugin
+Install Thinking Sphinx
 
-    script/plugin install git://github.com/freelancing-god/thinking-sphinx.git
+    sudo gem install freelancing-god-thinking-sphinx
 
 Write code then update Capistrano tasks
 
-    http://www.updrift.com/article/deploying-a-rails-app-with-thinking-sphinx
+    http://www.updrift.com/article/thinkingsphinx-capistrano-tasks
 
 Deploy then create cron
 
