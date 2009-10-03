@@ -1,0 +1,126 @@
+.info
+  -# Summary
+  - unless @page.summary.blank?
+    .box
+      .box-info
+        .holder
+          %h2 Summary
+          :markdown 
+            #{@page.summary}
+
+  -# Main Content
+  .box
+    .box-info
+      .holder
+        - unless @page.image_uri.blank?
+          .photo
+            %img{:src => @page.image_uri}
+
+        %h2
+          =h @page.title
+
+        %p
+          - if !@page.author.blank?
+            - author = "By #{@page.author}"
+            - author << ", #{@page.author_credentials}" if !@page.author_credentials.blank?
+            = author << '<br/>'
+          = @page.published_at
+
+        -# Movie box
+        #sm2-movie-box(style="margin-top:10px")
+          #sm2-container(style="height:0")
+          #movie-info
+ 
+        :markdown
+          #{@page.body}
+
+      - unless current_user && (current_user.votes.collect{|v| v.voteable == @page}.include? true)
+        %p
+          = link_to 'Recommend', recommend_path(:id => @page)
+ 
+      - if @page.not_blank_pdf_links
+        .pdf
+          %p
+            %a{:href => @page.pdf_links.first.uri}
+              = @page.pdf_links.first.title
+
+      -# Audio player (SoundManager2)
+      #control-template
+        .controls
+          .statusbar
+            .loading
+            .position
+        .timing
+          #sm2_timing.timing-data
+            %span(class="sm2_position") %s1 / 
+            %span(class="sm2_total") %s2
+        .peak
+          .peak-box
+            %span(class="l")
+            %span(class="r")
+      #spectrum-container.spectrum-container
+        .spectrum-box
+          .spectrum
+
+      - if @page.tags.count > 0
+        .tags
+          %p 
+            Tags: 
+            - @page.tags.each do |t|
+              = link_to(t.name, tag_path(t))
+ 
+      .resource
+        .comments
+          %div
+            %a(href="#")
+              %em &nbsp;
+              %span 17
+ 
+        - if @page.votes_for > 0
+          .recommended
+            %div
+              %a(href="#")
+                %em &nbsp;
+                %span
+                  = @page.votes_for 
+
+  -# Implementation
+  - unless @page.implementation.blank?
+    .box
+      .box-info
+        .holder
+          %h2 Implementation
+          :markdown
+            #{@page.implementation}
+
+  -# Comments
+  .box
+    .box-info
+      .holder
+        %h2 Comments
+        %p Commenting is not available during beta.
+
+.sidebar
+  - if @page.not_blank_related_links
+    .box
+      .box-info
+        %h2 Related Links
+        %ul.list
+          = render :partial => @page.not_blank_related_links
+  - elsif !@page.find_related_tags.blank?
+    .box
+      .box-info
+        %h2 Related Links
+        %ul.list
+          = render :partial => 'related_page', :collection => @page.find_related_tags[0...10]
+
+  - if @page.not_blank_external_links
+    .box
+      .box-info
+        %h2 External Links
+        %ul(class="list")
+          = render :partial => @page.not_blank_external_links
+
+  .box
+    .box-info
+      = render 'tags/most_popular'
