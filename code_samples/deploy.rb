@@ -12,7 +12,7 @@
 require 'capistrano/ext/multistage'
 require 'thinking_sphinx/deploy/capistrano'
 
-ssh_options[:port] = 22022
+ssh_options[:port] = 22222
 
 # set :default_stage, 'staging'
 #
