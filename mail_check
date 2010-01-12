@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+# Nightly Mail Check
+# Check if we can even send mail.
+
+require 'net/smtp'
+
+# Config
+config = {
+  :address     => 'smtp.gmail.com',
+  :port        =>  587,
+  :domain      => 'dreampointmedia.com',
+  :auth        => :plain,
+  :user_name   => 'user@example.com',
+  :password    => 'abc123',
+  :from        => 'user@example.com',
+  :recipents   =>  %w(someone@example.com)
+}
+
+msg = <<EMAIL_MESSAGE
+Subject: Mail is working.
+
+Sending email from staging via gmail.
+EMAIL_MESSAGE
+
+smtp = Net::SMTP.new(config[:address], config[:port])
+smtp.enable_starttls_auto
+
+smtp.start(config[:domain], config[:user_name], config[:password], config[:auth]) do |smtp|
+  smtp.send_message(msg, config[:from], config[:recipents])
+end
