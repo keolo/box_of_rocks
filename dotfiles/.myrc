@@ -69,7 +69,7 @@ export CDPATH
 # History ignores commands that include any l/ls/cd etc This kicks-ass! It drops repeats and other
 # useless things from the command history!
 # http://www.caliban.org/bash/index.shtml
-HISTIGNORE="ls:cd:[bf]g:exit:quit:q:sleep *:ssh *:say*"
+HISTIGNORE="ls:cd:[bf]g:exit:quit:q:sleep *:ssh *"
 
 # Ignores both commands that start with a space or a tab, and duplicates other options are as
 # follows:
@@ -128,6 +128,8 @@ alias mstop='sudo service mongrel_cluster stop'
 
 # Copy public ssh key to remote host
 # Usage: authme username@host.com
-function authme {
-  ssh $1 'cat >> ~/.ssh/authorized_keys' < ~/.ssh/id_rsa.pub
-}
+#function authme {
+#  ssh $1 'cat >> ~/.ssh/authorized_keys' < ~/.ssh/id_rsa.pub
+#}
+#
+# Use `ssh copy-id user@server.com` instead
