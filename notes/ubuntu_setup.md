@@ -276,16 +276,16 @@ Restart ftp server and test
 ### Thinking Sphinx
 First install Sphinx.
 
-    curl -LO http://www.sphinxsearch.com/downloads/sphinx-0.9.8.1.tar.gz
-    tar zxvf sphinx-0.9.8.1.tar.gz
-    cd sphinx-0.9.8.1
+    curl -LO http://sphinxsearch.com/downloads/sphinx-0.9.9.tar.gz
+    tar xzvf sphinx-0.9.9.tar.gz
+    cd sphinx-0.9.9
     ./configure
     make
     sudo make install
 
 Install Thinking Sphinx
 
-    sudo gem install freelancing-god-thinking-sphinx
+    sudo gem install thinking-sphinx
 
 Write code then update Capistrano tasks
 
