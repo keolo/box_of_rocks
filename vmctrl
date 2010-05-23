@@ -1,0 +1,125 @@
+#!/usr/bin/env ruby
+
+# Usage:
+#
+# vmctrl start [vmname]
+# * Starts vm
+# * Mounts directory via MacFuse
+# * ssh into vm
+#
+# vmctrl stop [vmname]
+# * Umounts MacFuse directory
+# * Saves state and closes vm
+#
+# vmctrl list [runningvms]
+#
+# vmctrl ssh [vmname]
+#
+# vmctrl status [vmname]
+
+$VERBOSE = nil # Shut up 'Insecure world writeable dir' warning
+STDOUT.sync = true
+
+class HelpNeeded < StandardError; end
+
+class VM
+  attr_accessor :name, :path, :port
+
+  def initialize(params)
+    @name = params[:name]
+    @path = config[@name]['path']
+    @port = config[@name]['port']
+  end
+
+  def start
+    if running?
+      puts "#{name} vm already running\n\n"
+      puts self.class.running
+    else
+      puts "Starting #{name} vm"
+      puts `VBoxManage startvm #{name}`
+      wait_for_vm_to_be_ready
+      mount
+      mvim
+      ssh
+    end
+  end
+
+  def stop
+    if !running?
+      puts "#{name} vm already stopped\n\n"
+      puts self.class.running
+    else
+      umount
+      puts "Stopping #{name} vm"
+      puts `VBoxManage controlvm #{name} savestate`
+    end
+  end
+
+  def wait_for_vm_to_be_ready
+    i = 0
+    while !running? && i < 5 do
+      puts "Sleeping... #{i}"
+      sleep(1)
+      i += 1
+    end
+    puts running? ? self.class.running : "#{name} vm is not ready after #{i} attempts."
+  end
+
+  def mount
+    puts "\nMounting #{name} to ~/mnt/#{name}. This may take a minute..."
+    `mkdir -p ~/mnt/#{name}`
+    `sshfs deploy@localhost:#{path} ~/mnt/#{name} -oauto_cache,reconnect,volname=#{name} -p #{port}`
+  end
+
+  def mvim
+    system "cd ~/mnt/#{name} && mvim ."
+  end
+  
+  def ssh
+    #depends_on(:vmrunning)
+    puts "\nSSH'ing into #{name}. This may take a minute..."
+    system "ssh deploy@localhost -p#{port}"
+  end
+
+  def umount
+    `umount -f ~/mnt/#{name}`
+  end
+ 
+  def running?
+    !self.class.running.grep(/^\".*\}$/).empty?
+  end
+
+  def config
+    {'intellisport' => 
+      {
+        'path' => '/home/deploy/intellisport/current',
+        'port' => 22022
+      }
+    }
+  end
+  
+  def self.running
+    `VBoxManage list runningvms`
+  end
+end
+
+
+cmd, param = ARGV
+#raise HelpNeeded unless cmd && param
+
+case cmd
+when 'start'
+  vm = VM.new(:name => param)
+  vm.start
+when 'stop'
+  vm = VM.new(:name => param)
+  vm.stop
+when 'list'
+  puts VM.running
+when 'ssh'
+  vm = VM.new(:name => param)
+  vm.ssh
+else
+  "Unknown command: #{cmd}"
+end
