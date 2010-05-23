@@ -128,8 +128,16 @@ alias mstop='sudo service mongrel_cluster stop'
 
 # Copy public ssh key to remote host
 # Usage: authme username@host.com
-#function authme {
-#  ssh $1 'cat >> ~/.ssh/authorized_keys' < ~/.ssh/id_rsa.pub
-#}
-#
-# Use `ssh copy-id user@server.com` instead
+function authme {
+  ssh $1 'cat >> ~/.ssh/authorized_keys' < ~/.ssh/id_rsa.pub
+}
+# Use `ssh copy-id user@server.com` instead (OS X for some reason doesn't have this command)
+
+
+#VBoxManage setextradata intellisport "VBoxInternal/Devices/e1000/0/LUN#0/Config/guestssh/Protocol" TCP
+#VBoxManage setextradata intellisport "VBoxInternal/Devices/e1000/0/LUN#0/Config/guestssh/GuestPort" 22
+#VBoxManage setextradata intellisport "VBoxInternal/Devices/e1000/0/LUN#0/Config/guestssh/HostPort" 22022
+
+#VBoxManage setextradata intellisport "VBoxInternal/Devices/e1000/0/LUN#0/Config/guesthttp/Protocol" TCP
+#VBoxManage setextradata intellisport "VBoxInternal/Devices/e1000/0/LUN#0/Config/guesthttp/GuestPort" 3000 
+#VBoxManage setextradata intellisport "VBoxInternal/Devices/e1000/0/LUN#0/Config/guesthttp/HostPort" 8080
