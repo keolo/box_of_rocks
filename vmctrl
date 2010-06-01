@@ -31,11 +31,22 @@ class VM
     @port = config[@name]['port']
   end
 
+  def set_extra_data
+    `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/guesthttp/GuestPort" 3000`
+    `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/guesthttp/HostPort" #{port - 14000}`
+    `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/guesthttp/Protocol" TCP`
+    `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/guestssh/GuestPort" 22`
+    `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/guestssh/HostPort" #{port}`
+    `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/guestssh/Protocol" TCP`
+    puts `VBoxManage getextradata #{name} enumerate`
+  end
+
   def start
     if running?
       puts "#{name} vm already running\n\n"
       puts self.class.running
     else
+      set_extra_data
       puts "Starting #{name} vm"
       puts `VBoxManage startvm #{name}`
       wait_for_vm_to_be_ready
@@ -60,7 +71,7 @@ class VM
     i = 0
     while !running? && i < 5 do
       puts "Sleeping... #{i}"
-      sleep(1)
+      sleep(1+i)
       i += 1
     end
     puts running? ? self.class.running : "#{name} vm is not ready after #{i} attempts."
@@ -75,7 +86,7 @@ class VM
   def mvim
     system "cd ~/mnt/#{name} && mvim ."
   end
-  
+
   def ssh
     #depends_on(:vmrunning)
     puts "\nSSH'ing into #{name}. This may take a minute..."
@@ -87,18 +98,23 @@ class VM
   end
  
   def running?
-    !self.class.running.grep(/^\".*\}$/).empty?
+    !self.class.running.grep(/^\"#{name}".*\}$/).empty?
   end
 
   def config
     {'intellisport' => 
       {
         'path' => '/home/deploy/intellisport/current',
-        'port' => 22022
-      }
+        'port' => 22001
+      },
+     'entrust' => 
+      {
+        'path' => '/home/deploy/entrust/current',
+        'port' => 22002
+      },
     }
   end
-  
+
   def self.running
     `VBoxManage list runningvms`
   end
