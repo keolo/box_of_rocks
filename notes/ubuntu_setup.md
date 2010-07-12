@@ -71,6 +71,11 @@ Or use the .myrc from my box of rocks (recommended):
     cd repos
     git clone git://github.com/keolo/box_of_rocks.git
 
+Configure global git settings:
+
+    git config --global user.name "Keolo Keagy"
+    git config --global user.email "keolo@dreampointmedia.com"
+
 Load .myrc if it exists
 
     cd
