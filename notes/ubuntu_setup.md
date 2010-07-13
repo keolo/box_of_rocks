@@ -99,7 +99,9 @@ Reload bash profile
 
 ### RVM
     bash < <( curl http://rvm.beginrescueend.com/releases/rvm-install-head )
-    rvm install 1.8.6-p369 -C --with-zlib-dir=$HOME/.rvm/usr --with-openssl-dir=/usr/local
+    rvm package install readline
+    rvm package install zlib
+    rvm install 1.8.6-p369 -C --with-readline-dir=$HOME/.rvm/usr --with-zlib-dir=$HOME/.rvm/usr --with-openssl-dir=/usr/local
     rvm --default 1.8.6-p369
 
 ### Ruby
