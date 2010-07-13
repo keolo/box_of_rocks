@@ -105,9 +105,9 @@ Reload bash profile
     cd
     mkdir src
     cd src/
-    curl -LO http://rubyforge.org/frs/download.php/69365/rubygems-1.3.6.tgz
-    tar xvzf rubygems-1.3.6.tgz
-    cd rubygems-1.3.6
+    curl -LO http://production.cf.rubygems.org/rubygems/rubygems-1.3.7.tgz
+    tar xvzf rubygems-1.3.7.tgz
+    cd rubygems-1.3.7
     sudo ruby setup.rb
     cd ..
     rm -rf rubygems*
