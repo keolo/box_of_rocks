@@ -97,6 +97,10 @@ Reload bash profile
     adduser kkeagy
     usermod -G admin kkeagy
 
+### RVM
+    bash < <( curl http://rvm.beginrescueend.com/releases/rvm-install-head )
+    rvm install 1.8.6-p369 -C --with-zlib-dir=$HOME/.rvm/usr --with-openssl-dir=/usr/local
+
 ### Ruby
     sudo aptitude install ruby ri rdoc irb ri1.8 ruby1.8-dev libzlib-ruby zlib1g libopenssl-ruby1.8
     ruby -v
