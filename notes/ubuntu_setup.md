@@ -317,6 +317,11 @@ Deploy then create cron
 
 ## The following are optional
 
+### NTP
+    sudo aptitude install ntp
+    sudo vi /etc/ntp.conf
+    tinker panic 0  # Add to top of file
+
 ### Sqlite3
     sudo aptitude install sqlite3 libsqlite3-dev
     sudo gem install sqlite3-ruby --no-rdoc --no-ri
