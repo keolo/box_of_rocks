@@ -15,14 +15,23 @@ http://users.piuha.net/martti/comp/ubuntu/en/server.html
     # Add sudo permissions to deploy user
     deploy ALL=(ALL) ALL
 
+### Add config to vmctrl
+      'vmname' => 
+      {
+        'path' => '/home/deploy/vmname/current',
+        'port' => 22222
+      },
+
 ### Set up rsa authentication
-    su - deploy
     mkdir .ssh
 
 Then from local machine (on os x):
 
     authme deploy@hostname
     ssh hostname
+
+authme can also take ssh params e.g.:
+    authme "deploy@localhost -p22222"
 
 Rinse and repeat for any other users that you need.
 
