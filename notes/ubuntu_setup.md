@@ -134,10 +134,10 @@ Reload bash profile
 
 
 ### Rails and dependents
-    sudo gem install rails --no-rdoc --no-ri
-    sudo gem install rspec --no-rdoc --no-ri
-    sudo gem install rspec-rails --no-rdoc --no-ri
-    sudo gem install mysql --no-rdoc --no-ri
+    gem install rails --no-rdoc --no-ri
+    gem install rspec --no-rdoc --no-ri
+    gem install rspec-rails --no-rdoc --no-ri
+    gem install mysql --no-rdoc --no-ri
 
     irb
     irb(main):001:0> require 'rubygems'
@@ -146,8 +146,8 @@ Reload bash profile
     => true
 
 ### Install Mongrel and Mongrel Cluster
-    sudo gem install mongrel --no-rdoc --no-ri
-    sudo gem install mongrel_cluster --no-rdoc --no-ri
+    gem install mongrel --no-rdoc --no-ri
+    gem install mongrel_cluster --no-rdoc --no-ri
 
 To start mongrel cluster on boot, copy the mongrel_cluster script file to `/etc/init.d`. Run
 `gem env` to find out where your ruby gems are installed.
