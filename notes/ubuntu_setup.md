@@ -1,5 +1,4 @@
-# Ubuntu Server 9.04 Setup (VMWare and Linode)
-2009-07-14
+# Ubuntu Server Setup (VMWare and Linode)
 
 ### Install base OS
 Download and install [Ubuntu Minimal Server 64bit version](https://help.ubuntu.com/community/Installation/MinimalCD).
