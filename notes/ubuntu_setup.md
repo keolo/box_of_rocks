@@ -115,7 +115,7 @@ Reload bash profile
     sudo aptitude install ruby ri rdoc irb ri1.8 ruby1.8-dev libzlib-ruby zlib1g libopenssl-ruby1.8
     ruby -v
 
-### RubyGems
+### RubyGems  (don't need to do this if using RVM)
     cd
     mkdir src
     cd src/
@@ -131,6 +131,7 @@ Reload bash profile
 
 ### MySQL
     sudo aptitude install mysql-server libmysqlclient15-dev libmysqlclient15off zlib1g-dev libmysql-ruby1.8
+
 
 ### Rails and dependents
     sudo gem install rails --no-rdoc --no-ri
