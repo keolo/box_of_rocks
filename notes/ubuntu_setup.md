@@ -107,12 +107,11 @@ Reload bash profile
 
 ### RVM
     bash < <( curl http://rvm.beginrescueend.com/releases/rvm-install-head )
-    rvm package install readline
-    rvm package install zlib
-    rvm install 1.8.6-p369 -C --with-readline-dir=$HOME/.rvm/usr --with-zlib-dir=$HOME/.rvm/usr --with-openssl-dir=/usr/local
+    aptitude install build-essential bison openssl libreadline5 libreadline-dev curl git-core zlib1g zlib1g-dev libssl-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev
+    rvm install 1.8.6-p369
     rvm --default 1.8.6-p369
 
-### Ruby
+### Ruby (it's better to use RVM instead)
     sudo aptitude install ruby ri rdoc irb ri1.8 ruby1.8-dev libzlib-ruby zlib1g libopenssl-ruby1.8
     ruby -v
 
