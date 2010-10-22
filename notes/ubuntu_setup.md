@@ -96,6 +96,9 @@ want the ubuntu defaults like color highlighting (I like to comment it out).
         . "$HOME/repos/box_of_rocks/dotfiles/.myrc"
     fi
 
+    # Load RVM into a shell session
+    [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
 Reload bash profile
 
     . .profile
