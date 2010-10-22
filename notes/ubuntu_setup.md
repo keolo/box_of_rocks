@@ -58,8 +58,13 @@ Optionally update apt/sources.list
     sudo aptitude update
     sudo aptitude dist-upgrade
 
-### Install build tools and curl
-    sudo aptitude install build-essential curl
+### Install build tools, git, and curl
+    sudo aptitude install build-essential git-core curl
+
+Configure global git settings:
+
+    git config --global user.name "Keolo Keagy"
+    git config --global user.email "keolo@dreampointmedia.com"
 
 ### Setup for VMWare
 [VMWare setup](vmware_setup.md)
@@ -74,15 +79,9 @@ You can do this manually (manual - not recommened):
 
 Or use the .myrc from my box of rocks (recommended):
 
-    sudo aptitude install git-core
     mkdir repos
     cd repos
     git clone git://github.com/keolo/box_of_rocks.git
-
-Configure global git settings:
-
-    git config --global user.name "Keolo Keagy"
-    git config --global user.email "keolo@dreampointmedia.com"
 
 Load .myrc if it exists
 
