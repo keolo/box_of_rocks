@@ -113,6 +113,10 @@ Reload bash profile
     rvm install 1.8.6-p369
     rvm --default 1.8.6-p369
 
+### RubyGems config
+Add the following to ~/.gemrc
+    gem: --no-ri --no-rdoc
+
 ### Ruby (it's better to use RVM instead)
     sudo aptitude install ruby ri rdoc irb ri1.8 ruby1.8-dev libzlib-ruby zlib1g libopenssl-ruby1.8
     ruby -v
