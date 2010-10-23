@@ -1,5 +1,4 @@
-# Ubuntu Server 9.04 Setup (VMWare and Linode)
-2009-07-14
+# Ubuntu Server Setup (VMWare and Linode)
 
 ### Install base OS
 Download and install [Ubuntu Minimal Server 64bit version](https://help.ubuntu.com/community/Installation/MinimalCD).
@@ -15,14 +14,23 @@ http://users.piuha.net/martti/comp/ubuntu/en/server.html
     # Add sudo permissions to deploy user
     deploy ALL=(ALL) ALL
 
+### Add config to vmctrl
+      'vmname' => 
+      {
+        'path' => '/home/deploy/vmname/current',
+        'port' => 22222
+      },
+
 ### Set up rsa authentication
-    su - deploy
     mkdir .ssh
 
 Then from local machine (on os x):
 
     authme deploy@hostname
     ssh hostname
+
+authme can also take ssh params e.g.:
+    authme "deploy@localhost -p22222"
 
 Rinse and repeat for any other users that you need.
 
@@ -50,8 +58,13 @@ Optionally update apt/sources.list
     sudo aptitude update
     sudo aptitude dist-upgrade
 
-### Install build tools and curl
-    sudo aptitude install build-essential curl
+### Install build tools, git, and curl
+    sudo aptitude install build-essential git-core curl
+
+Configure global git settings:
+
+    git config --global user.name "Keolo Keagy"
+    git config --global user.email "keolo@dreampointmedia.com"
 
 ### Setup for VMWare
 [VMWare setup](vmware_setup.md)
@@ -66,7 +79,6 @@ You can do this manually (manual - not recommened):
 
 Or use the .myrc from my box of rocks (recommended):
 
-    sudo aptitude install git-core
     mkdir repos
     cd repos
     git clone git://github.com/keolo/box_of_rocks.git
@@ -84,6 +96,9 @@ want the ubuntu defaults like color highlighting (I like to comment it out).
         . "$HOME/repos/box_of_rocks/dotfiles/.myrc"
     fi
 
+    # Load RVM into a shell session
+    [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
 Reload bash profile
 
     . .profile
@@ -92,17 +107,27 @@ Reload bash profile
     adduser kkeagy
     usermod -G admin kkeagy
 
-### Ruby
+### RVM
+    bash < <( curl http://rvm.beginrescueend.com/releases/rvm-install-head )
+    sudo aptitude install build-essential bison openssl libreadline5 libreadline-dev curl git-core zlib1g zlib1g-dev libssl-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev
+    rvm install 1.8.6-p369
+    rvm --default 1.8.6-p369
+
+### RubyGems config
+Add the following to ~/.gemrc
+    gem: --no-ri --no-rdoc
+
+### Ruby (it's better to use RVM instead)
     sudo aptitude install ruby ri rdoc irb ri1.8 ruby1.8-dev libzlib-ruby zlib1g libopenssl-ruby1.8
     ruby -v
 
-### RubyGems
+### RubyGems  (don't need to do this if using RVM)
     cd
     mkdir src
     cd src/
-    curl -LO http://rubyforge.org/frs/download.php/69365/rubygems-1.3.6.tgz
-    tar xvzf rubygems-1.3.6.tgz
-    cd rubygems-1.3.6
+    curl -LO http://production.cf.rubygems.org/rubygems/rubygems-1.3.7.tgz
+    tar xvzf rubygems-1.3.7.tgz
+    cd rubygems-1.3.7
     sudo ruby setup.rb
     cd ..
     rm -rf rubygems*
@@ -113,11 +138,12 @@ Reload bash profile
 ### MySQL
     sudo aptitude install mysql-server libmysqlclient15-dev libmysqlclient15off zlib1g-dev libmysql-ruby1.8
 
+
 ### Rails and dependents
-    sudo gem install rails --no-rdoc --no-ri
-    sudo gem install rspec --no-rdoc --no-ri
-    sudo gem install rspec-rails --no-rdoc --no-ri
-    sudo gem install mysql --no-rdoc --no-ri
+    gem install rails --no-rdoc --no-ri
+    gem install rspec --no-rdoc --no-ri
+    gem install rspec-rails --no-rdoc --no-ri
+    gem install mysql --no-rdoc --no-ri
 
     irb
     irb(main):001:0> require 'rubygems'
@@ -126,8 +152,8 @@ Reload bash profile
     => true
 
 ### Install Mongrel and Mongrel Cluster
-    sudo gem install mongrel --no-rdoc --no-ri
-    sudo gem install mongrel_cluster --no-rdoc --no-ri
+    gem install mongrel --no-rdoc --no-ri
+    gem install mongrel_cluster --no-rdoc --no-ri
 
 To start mongrel cluster on boot, copy the mongrel_cluster script file to `/etc/init.d`. Run
 `gem env` to find out where your ruby gems are installed.
@@ -304,6 +330,11 @@ Deploy then create cron
 
 
 ## The following are optional
+
+### NTP
+    sudo aptitude install ntp
+    sudo vi /etc/ntp.conf
+    tinker panic 0  # Add to top of file
 
 ### Sqlite3
     sudo aptitude install sqlite3 libsqlite3-dev
