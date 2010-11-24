@@ -109,7 +109,7 @@ Reload bash profile
 
 ### RVM
     bash < <( curl http://rvm.beginrescueend.com/releases/rvm-install-head )
-    sudo aptitude install build-essential bison openssl libreadline5 libreadline-dev curl git-core zlib1g zlib1g-dev libssl-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev
+    sudo aptitude install build-essential bison openssl libreadline5 libreadline-dev curl git-core zlib1g zlib1g-dev libssl-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev libxml2-dev
     rvm install 1.8.6-p369
     rvm --default 1.8.6-p369
 
