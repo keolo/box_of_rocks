@@ -138,6 +138,8 @@ Add the following to ~/.gemrc
 ### MySQL
     sudo aptitude install mysql-server libmysqlclient15-dev libmysqlclient15off zlib1g-dev libmysql-ruby1.8
 
+Sometimes rails can't find the mysql socket.
+    sudo ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
 
 ### Rails and dependents
     gem install rails --no-rdoc --no-ri
