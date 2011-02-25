@@ -142,10 +142,10 @@ Sometimes rails can't find the mysql socket.
     sudo ln -s /var/run/mysqld/mysqld.sock /tmp/mysql.sock
 
 ### Rails and dependents
-    gem install rails --no-rdoc --no-ri
-    gem install rspec --no-rdoc --no-ri
-    gem install rspec-rails --no-rdoc --no-ri
-    gem install mysql --no-rdoc --no-ri
+    gem install rails
+    gem install rspec
+    gem install rspec-rails
+    gem install mysql
 
     irb
     irb(main):001:0> require 'rubygems'
@@ -154,8 +154,8 @@ Sometimes rails can't find the mysql socket.
     => true
 
 ### Install Mongrel and Mongrel Cluster
-    gem install mongrel --no-rdoc --no-ri
-    gem install mongrel_cluster --no-rdoc --no-ri
+    gem install mongrel
+    gem install mongrel_cluster
 
 To start mongrel cluster on boot, copy the mongrel_cluster script file to `/etc/init.d`. Run
 `gem env` to find out where your ruby gems are installed.
@@ -413,3 +413,7 @@ Install via intructions here.
     sudo aptitude install libfreeimage-dev
     sudo gem install RubyInline --no-rdoc --no-ri
     sudo gem install image_science --no-rdoc --no-ri
+
+### VirtualBox
+To shutdown vm
+    sudo aptitude install acpid
