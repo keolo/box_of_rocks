@@ -127,6 +127,36 @@ class VM
         'path' => '/home/deploy/cooltheearth/current',
         'port' => 22005
       },
+     'good' => 
+      {
+        'path' => '/home/deploy/good/current',
+        'port' => 22006
+      },
+     'audiopong' => 
+      {
+        'path' => '/home/deploy/audiopong/current',
+        'port' => 22007
+      },
+     'paperdrop' => 
+      {
+        'path' => '/home/deploy/paperdrop/current',
+        'port' => 22008
+      },
+     'turbo' => 
+      {
+        'path' => '/home/deploy/turbo/current',
+        'port' => 22009
+      },
+     'djtransitions' => 
+      {
+        'path' => '/home/deploy/djtransitions/current',
+        'port' => 22010
+      },
+     'sharespost' => 
+      {
+        'path' => '/home/deploy/sharespost/current',
+        'port' => 22011
+      },
     }
   end
 

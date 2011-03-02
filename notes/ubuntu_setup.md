@@ -15,7 +15,7 @@ http://users.piuha.net/martti/comp/ubuntu/en/server.html
     deploy ALL=(ALL) ALL
 
 ### Add config to vmctrl
-      'vmname' => 
+      'vmname' =>
       {
         'path' => '/home/deploy/vmname/current',
         'port' => 22222
@@ -214,6 +214,28 @@ text if everything is working correctly.
 ### [Production] Configure Nginx
     http://articles.slicehost.com/2007/12/13/ubuntu-gutsy-nginx-configuration-1
 
+### Building Nginx with upload progress
+
+Install required dependencies.
+    sudo aptitude install libpcre3 libpcre3-dev libpcrecpp0 libssl-dev zlib1g-dev
+
+Configue and install nginx.
+    ./configure --sbin-path=/usr/local/sbin --with-http_ssl_module --add-module=../masterzen-nginx-upload-progress-module-8b55a34/ --add-module=../nginx_upload_module-2.2.0/
+    make
+    sudo make install
+
+Test config.
+    sudo nginx -t
+
+Start nginx.
+    sudo nginx
+
+Stop nginx.
+    sudo kill `cat /usr/local/nginx/logs/nginx.pid`
+
+Init script.
+    http://articles.slicehost.com/2009/3/4/ubuntu-intrepid-adding-an-nginx-init-script
+
 ### Application Setup
 Pull in project from github. Before we set up capistrano it's a good idea to test your application
 stack.
@@ -323,7 +345,7 @@ Deploy then create cron
 
     PATH=/usr/local/bin:/usr/bin:/bin
     SHELL=/bin/bash
-    
+
     # Index Thinking Sphinx Search Engine every 20 mins and start if server is
     # rebooted.
     # m        h dom mon dow   command
