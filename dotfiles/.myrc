@@ -37,9 +37,11 @@ case $TERM in
 esac
 
 # Settings for OS X and Ubuntu
-case `uname` in
+case `uname -a` in
   Darwin*)
     PS1="${TITLEBAR}$CYAN>$NO_COLOR ";;
+  *linode*)
+    PS1="${TITLEBAR}$RED>$NO_COLOR ";; 
   *)
     PS1="${TITLEBAR}$YELLOW>$NO_COLOR ";;
 esac
