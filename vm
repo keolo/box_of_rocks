@@ -107,9 +107,9 @@ class VM
         'path' => '/home/deploy/intellisport/current',
         'port' => 22001
       },
-     'entrust' => 
+     'notes' => 
       {
-        'path' => '/home/deploy/entrust/current',
+        'path' => '/home/deploy/notes/current',
         'port' => 22002
       },
      'iat' => 
@@ -157,6 +157,11 @@ class VM
         'path' => '/home/deploy/sharespost/current',
         'port' => 22011
       },
+      'emailifier' =>
+      {
+        'path' => '/home/deploy/emailifier/current',
+        'port' => 22011
+      },
     }
   end
 
@@ -166,21 +171,28 @@ class VM
 end
 
 
-cmd, param = ARGV
+cmd, name, path = ARGV
 #raise HelpNeeded unless cmd && param
 
 case cmd
 when 'start'
-  vm = VM.new(:name => param)
+  vm = VM.new(:name => name)
   vm.start
 when 'stop'
-  vm = VM.new(:name => param)
+  vm = VM.new(:name => name)
   vm.stop
 when 'list'
   puts VM.running
 when 'ssh'
-  vm = VM.new(:name => param)
+  vm = VM.new(:name => name)
   vm.ssh
+when 'mount'
+  vm = VM.new(:name => name)
+  vm.mount
+  vm.mvim
+when 'umount'
+  vm = VM.new(:name => name)
+  vm.umount
 else
   "Unknown command: #{cmd}"
 end
