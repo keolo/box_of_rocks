@@ -35,9 +35,14 @@ class VM
     `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/guesthttp/GuestPort" 3000`
     `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/guesthttp/HostPort" #{port - 14000}`
     `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/guesthttp/Protocol" TCP`
+
     `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/guestssh/GuestPort" 22`
     `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/guestssh/HostPort" #{port}`
     `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/guestssh/Protocol" TCP`
+
+    `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/livereload/GuestPort" 35729`
+    `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/livereload/HostPort" 35729`
+    `VBoxManage setextradata #{name} "VBoxInternal/Devices/e1000/0/LUN#0/Config/livereload/Protocol" TCP`
     puts `VBoxManage getextradata #{name} enumerate`
   end
 
