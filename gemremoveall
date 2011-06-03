@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+
+installation_dir = (/INSTALLATION DIRECTORY: (.*)/).match(`gem environment`)[1]
+FileUtils.remove_dir(installation_dir, true)

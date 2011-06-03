@@ -102,9 +102,6 @@ alias sc='script/console'
 alias sg='script/generate'
 alias sp='script/plugin'
 
-# Rubygems
-alias gemremoveall='gem list | cut -d" " -f1 | xargs gem uninstall -aIx'
-
 # Git
 alias ga='git add'
 alias gco='git checkout'
