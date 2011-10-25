@@ -108,10 +108,10 @@ Reload bash profile
     usermod -G admin kkeagy
 
 ### RVM
-    bash < <( curl http://rvm.beginrescueend.com/releases/rvm-install-head )
+    bash < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer )
     sudo aptitude install build-essential bison openssl libreadline5 libreadline-dev curl git-core zlib1g zlib1g-dev libssl-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev libxml2-dev
-    rvm install 1.8.6-p369
-    rvm --default 1.8.6-p369
+    rvm install 1.9.2
+    rvm --default 1.9.2
 
 ### RubyGems config
 Add the following to ~/.gemrc
