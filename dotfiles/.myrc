@@ -115,6 +115,7 @@ alias gp='git push'
 alias gst='git status'
 alias gw='git whatchanged'
 alias gr='git rebase'
+alias gt='git tag'
 
 # Nginx
 alias nst='sudo service nginx status'
