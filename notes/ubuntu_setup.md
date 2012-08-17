@@ -99,6 +99,8 @@ want the ubuntu defaults like color highlighting (I like to comment it out).
     # Load RVM into a shell session
     [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
+You can edit `.bashrc` to remove colors when using ls.
+
 Reload bash profile
 
     . .profile
