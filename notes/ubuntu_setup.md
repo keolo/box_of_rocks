@@ -1,5 +1,7 @@
 # Ubuntu Server Setup (VMWare and Linode)
 
+http://matschaffer.com/2011/06/minimal-ubuntu-virtualbox/
+
 ### Install base OS
 Download and install [Ubuntu Minimal Server 64bit version](https://help.ubuntu.com/community/Installation/MinimalCD).
 
